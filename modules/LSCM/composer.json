@@ -1,0 +1,20 @@
+{
+    "name": "erp-modules/lscm",
+    "description": "Logistics & Supply Chain Management (LSCM) Module for the Modular ERP System.",
+    "type": "erp-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\LSCM\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}

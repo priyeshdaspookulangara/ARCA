@@ -26,6 +26,11 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Modules\CRM\Core\Providers\CrmServiceProvider::class);
         }
 
+        // Register LSCM Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\LSCM\Core\Providers\LscmServiceProvider::class)) {
+            $this->app->register(\Modules\LSCM\Core\Providers\LscmServiceProvider::class);
+        }
+
         // Future: Dynamically scan 'modules' directory and register providers
         // based on a configuration or manifest file for each module.
     }
