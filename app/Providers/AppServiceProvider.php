@@ -21,6 +21,11 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Modules\Fina\Core\Providers\FinaServiceProvider::class);
         }
 
+        // Register CRM Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\CRM\Core\Providers\CrmServiceProvider::class)) {
+            $this->app->register(\Modules\CRM\Core\Providers\CrmServiceProvider::class);
+        }
+
         // Future: Dynamically scan 'modules' directory and register providers
         // based on a configuration or manifest file for each module.
     }

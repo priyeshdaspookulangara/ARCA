@@ -1,0 +1,20 @@
+{
+    "name": "erp-modules/crm",
+    "description": "Customer Relationship Management (CRM) Module for the Modular ERP System.",
+    "type": "erp-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\CRM\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}
