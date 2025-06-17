@@ -36,6 +36,16 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Modules\PS\Core\Providers\PsServiceProvider::class);
         }
 
+        // Register EWM Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\EWM\Core\Providers\EwmServiceProvider::class)) {
+            $this->app->register(\Modules\EWM\Core\Providers\EwmServiceProvider::class);
+        }
+
+        // Register AuthMgt Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\AuthMgt\Core\Providers\AuthServiceProvider::class)) {
+            $this->app->register(\Modules\AuthMgt\Core\Providers\AuthServiceProvider::class);
+        }
+
         // Future: Dynamically scan 'modules' directory and register providers
         // based on a configuration or manifest file for each module.
     }
