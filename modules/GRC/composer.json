@@ -1,0 +1,20 @@
+{
+    "name": "arca-modules/grc",
+    "description": "ARCA Governance, Risk, and Compliance (GRC) Module.",
+    "type": "arca-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ARCA Development Team",
+            "email": "dev@arcaerp.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\GRC\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}

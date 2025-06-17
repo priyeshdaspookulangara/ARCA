@@ -51,6 +51,11 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Modules\PLM\Core\Providers\PlmServiceProvider::class);
         }
 
+        // Register GRC Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\GRC\Core\Providers\GrcServiceProvider::class)) {
+            $this->app->register(\Modules\GRC\Core\Providers\GrcServiceProvider::class);
+        }
+
         // Future: Dynamically scan 'modules' directory and register providers
         // based on a configuration or manifest file for each module.
     }
