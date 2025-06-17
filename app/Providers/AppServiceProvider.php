@@ -56,6 +56,11 @@ class AppServiceProvider extends ServiceProvider
             $this->app->register(\Modules\GRC\Core\Providers\GrcServiceProvider::class);
         }
 
+        // Register MDG Module Service Provider if it exists and is enabled
+        if (class_exists(\Modules\MDG\Core\Providers\MdgServiceProvider::class)) {
+            $this->app->register(\Modules\MDG\Core\Providers\MdgServiceProvider::class);
+        }
+
         // Future: Dynamically scan 'modules' directory and register providers
         // based on a configuration or manifest file for each module.
     }

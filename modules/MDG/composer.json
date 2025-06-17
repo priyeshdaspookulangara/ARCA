@@ -1,0 +1,20 @@
+{
+    "name": "arca-modules/mdg",
+    "description": "ARCA Master Data Governance (MDG) Module.",
+    "type": "arca-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "ARCA Development Team",
+            "email": "dev@arcaerp.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\MDG\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}
