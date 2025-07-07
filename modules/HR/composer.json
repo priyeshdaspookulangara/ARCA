@@ -11,7 +11,16 @@
     ],
     "autoload": {
         "psr-4": {
-            "Modules\HR\": "src/"
+            "Modules\HR\": "src/",
+            "Modules\HR\Database\Factories\": "database/factories/",
+            "Modules\HR\Database\Seeders\": "database/seeders/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Modules\HR\Providers\HRServiceProvider"
+            ]
         }
     },
     "require": {
