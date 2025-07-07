@@ -98,17 +98,34 @@ class HRServiceProvider extends ServiceProvider
      */
     protected function loadRoutes()
     {
-        if (file_exists(module_path($this->moduleName, 'routes/web.php'))) {
-            Route::middleware('web')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers")
-                ->group(module_path($this->moduleName, 'routes/web.php'));
-        }
+        $this->loadApiRoutes();
+        $this->loadWebRoutes();
+    }
 
-        if (file_exists(module_path($this->moduleName, 'routes/api.php'))) {
-            Route::prefix('api')
-                ->middleware('api')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers")
-                ->group(module_path($this->moduleName, 'routes/api.php'));
+    /**
+     * Load API routes for the module.
+     */
+    protected function loadApiRoutes()
+    {
+        $apiRoutesPath = module_path($this->moduleName, 'routes/api.php');
+        if (file_exists($apiRoutesPath)) {
+            Route::prefix('api') // This global 'api' prefix is standard for Laravel API routes
+                 ->middleware('api') // Standard 'api' middleware group
+                 ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Adjusted namespace
+                 ->group($apiRoutesPath);
+        }
+    }
+
+    /**
+     * Load web routes for the module.
+     */
+    protected function loadWebRoutes()
+    {
+        $webRoutesPath = module_path($this->moduleName, 'routes/web.php');
+        if (file_exists($webRoutesPath)) {
+            Route::middleware('web') // Standard 'web' middleware group
+                 ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Adjusted namespace
+                 ->group($webRoutesPath);
         }
     }
 
