@@ -157,4 +157,52 @@ This document outlines the conceptual Vue.js components for managing Departments
     *   **API Calls:** POST `/api/hr/contracts/{contract.id}/terminate`.
     *   **Responsibility:** Form to capture reason and date for early termination of a contract.
 
+---
+## 7. Leave Management (Phase 3)
+
+**Location:** `modules/HR/resources/js/components/leave/`
+
+*   **Admin: `LeaveTypeManagement.vue` (Page Component)**
+    *   **Data:** `leaveTypes` (array), `isLoading`, `error`, `showFormModal` (boolean), `editingLeaveType` (object|null).
+    *   **Methods:** `fetchLeaveTypes()`, `openCreateModal()`, `editLeaveType(type)`, `saveLeaveType(typeData)`, `deleteLeaveType(type)`.
+    *   **API Calls:** GET, POST, PUT, DELETE `/api/hr/leave-types`.
+    *   **Child Components:** `ResourceTable` (for leave types), `LeaveTypeFormModal`, `ConfirmDeleteModal`.
+    *   **Responsibility:** Admin interface for CRUD operations on leave types.
+
+*   **Admin: `LeaveTypeFormModal.vue`**
+    *   **Props:** `leaveType` (object, for editing), `isVisible`.
+    *   **Data:** `formData` (name, description, is_paid, default_entitlement_days, is_active), `formErrors`.
+    *   **Methods:** `submitForm()`, `close()`.
+    *   **Responsibility:** Form for creating/editing leave type details.
+
+*   **Employee: `MyLeaveRequests.vue` (Page Component)**
+    *   **Data:** `myRequests` (array), `isLoading`, `error`, `showRequestModal` (boolean).
+    *   **Props:** `employeeId` (number, or obtained from auth store).
+    *   **Methods:** `fetchMyRequests()`, `openNewRequestModal()`, `cancelMyRequest(request)`.
+    *   **API Calls:** GET `/api/hr/employees/{employeeId}/leave-requests`, PUT `/api/hr/leave-requests/{id}` (for cancellation).
+    *   **Child Components:** `ResourceTable` (for leave requests), `LeaveRequestFormModal`, `ConfirmActionModal` (for cancellation).
+    *   **Responsibility:** Displays the current employee's leave request history and status. Allows submitting new requests and cancelling pending ones.
+
+*   **Employee/Shared: `LeaveRequestFormModal.vue`**
+    *   **Props:** `employeeId` (number, for creating), `isVisible`. (No `leaveRequest` prop as employees typically don't edit submitted requests, only cancel).
+    *   **Data:** `formData` (hr_leave_type_id, start_date, end_date, duration_days, reason, employee_remarks), `formErrors`.
+    *   **Reference Data Props:** `leaveTypesList` (active leave types).
+    *   **Methods:** `submitRequest()`, `calculateDuration()`, `close()`.
+    *   **API Calls:** POST `/api/hr/employees/{employeeId}/leave-requests`.
+    *   **Responsibility:** Form for an employee to submit a new leave request. Includes selecting leave type, start/end dates (with calendar), reason. Duration might be auto-calculated or manually entered for half-days.
+
+*   **Manager/Admin: `TeamLeaveRequests.vue` or `AllLeaveRequests.vue` (Page Component)**
+    *   **Data:** `leaveRequests` (array), `isLoading`, `error`, `filters` (status, department, date range), `selectedRequest` (for viewing details or actioning).
+    *   **Methods:** `fetchLeaveRequests()`, `approveRequest(request)`, `rejectRequest(request)`, `viewRequestDetails(request)`.
+    *   **API Calls:** GET `/api/hr/leave-requests` (with query params for filters), PUT `/api/hr/leave-requests/{id}` (for approval/rejection).
+    *   **Child Components:** `ResourceTable` (for leave requests with manager actions), `LeaveRequestApprovalModal` (or inline actions).
+    *   **Responsibility:** Interface for managers/admins to view and action (approve/reject) pending leave requests. Includes filtering and sorting.
+
+*   **Manager/Admin: `LeaveRequestApprovalModal.vue` (or inline form elements in table row)**
+    *   **Props:** `leaveRequest` (object), `isVisible`.
+    *   **Data:** `formData` (approver_remarks, rejection_reason - if rejecting), `formErrors`.
+    *   **Methods:** `submitApproval()`, `submitRejection()`, `close()`.
+    *   **API Calls:** PUT `/api/hr/leave-requests/{leaveRequest.id}`.
+    *   **Responsibility:** Form/modal for a manager/admin to add remarks and confirm approval or rejection of a leave request.
+
 This conceptual outline provides a basis for the frontend development. Actual implementation would involve creating these `.vue` files, writing template markup, script logic, and styling.

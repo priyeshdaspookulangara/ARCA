@@ -40,6 +40,15 @@ Route::prefix('hr')->name('hr.api.')->group(function () {
     // DELETE to /contracts/{contract} (though we might not use DELETE, but 'terminate' status change)
     Route::post('contracts/{contract}/terminate', [\Modules\HR\PersonnelAdmin\Http\Controllers\ContractController::class, 'terminate'])->name('contracts.terminate');
 
+    // Time Management - Leave Types (Admin)
+    Route::apiResource('leave-types', \Modules\HR\TimeManagement\Http\Controllers\LeaveTypeController::class);
+
+    // Time Management - Leave Requests
+    Route::get('leave-requests', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'index'])->name('leaveRequests.indexAll'); // Admin/Manager view all
+    Route::get('employees/{employee}/leave-requests', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'index'])->name('employees.leaveRequests.index'); // Employee views their own
+    Route::post('employees/{employee}/leave-requests', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'store'])->name('employees.leaveRequests.store');
+    Route::get('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'show'])->name('leaveRequests.show');
+    Route::put('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'update'])->name('leaveRequests.update'); // For status changes (approve, reject, cancel)
 
     // Future HR API routes related to Personnel Administration can be added here.
 });

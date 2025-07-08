@@ -29,6 +29,9 @@ class HRServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
         $this->loadRoutes();
+
+        // Register seeders if needed, for example, to be called from main DatabaseSeeder
+        // $this->app->singleton(\Modules\HR\Database\Seeders\HRDatabaseSeeder::class);
     }
 
     /**
@@ -40,6 +43,9 @@ class HRServiceProvider extends ServiceProvider
     {
         // $this->app->register(RouteServiceProvider::class);
         // Register other services, repositories, etc.
+
+        // If you have module-specific commands:
+        // $this->commands([]);
     }
 
     /**
@@ -111,7 +117,7 @@ class HRServiceProvider extends ServiceProvider
         if (file_exists($apiRoutesPath)) {
             Route::prefix('api') // This global 'api' prefix is standard for Laravel API routes
                  ->middleware('api') // Standard 'api' middleware group
-                 ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Adjusted namespace
+                 // ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Removing default namespace for more flexibility
                  ->group($apiRoutesPath);
         }
     }
@@ -124,7 +130,7 @@ class HRServiceProvider extends ServiceProvider
         $webRoutesPath = module_path($this->moduleName, 'routes/web.php');
         if (file_exists($webRoutesPath)) {
             Route::middleware('web') // Standard 'web' middleware group
-                 ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Adjusted namespace
+                 // ->namespace("Modules\\{$this->moduleName}\\PersonnelAdmin\\Http\\Controllers") // Removing default namespace
                  ->group($webRoutesPath);
         }
     }
