@@ -102,4 +102,59 @@ This document outlines the conceptual Vue.js components for managing Departments
 *   Lists of reference data (e.g., all departments for a dropdown, all jobs) might be fetched once and stored in a global or HR module-specific store to avoid repeated API calls in forms.
 *   Loading states and error handling for API calls could be managed centrally or within each page/form component.
 
+---
+## 5. Personnel Action Management (Phase 2)
+
+**Location:** `modules/HR/resources/js/components/personnel_actions/`
+
+*   **`PersonnelActionHistory.vue` (Likely part of Employee Detail View)**
+    *   **Props:** `employeeId` (number).
+    *   **Data:** `actions` (array), `isLoading`.
+    *   **Methods:** `fetchActions()`.
+    *   **API Calls:** GET `/api/hr/employees/{employeeId}/personnel-actions`.
+    *   **Child Components:** `ResourceTable` (configured for actions).
+    *   **Responsibility:** Displays a chronological list of personnel actions for a given employee. Table columns would show action type, effective date, status, reason. A way to view `details_json` might be needed (e.g., a modal).
+
+*   **`InitiatePromotionModal.vue`**
+    *   **Props:** `employee` (object), `isVisible`, `positionsList` (vacant positions).
+    *   **Data:** `formData` (new_hr_position_id, new_salary_amount, new_salary_currency, new_salary_frequency, effective_date, reason, promotion_details_notes), `formErrors`.
+    *   **Methods:** `submitPromotion()`, `close()`.
+    *   **API Calls:** POST `/api/hr/employees/{employee.id}/promote`.
+    *   **Responsibility:** Form to capture details for initiating an employee promotion.
+
+*   **`InitiateTerminationModal.vue`**
+    *   **Props:** `employee` (object), `isVisible`.
+    *   **Data:** `formData` (termination_type, effective_date, reason, termination_details_notes, is_eligible_for_rehire), `formErrors`.
+    *   **Methods:** `submitTermination()`, `close()`.
+    *   **API Calls:** POST `/api/hr/employees/{employee.id}/terminate`.
+    *   **Responsibility:** Form to capture details for initiating an employee termination.
+
+---
+## 6. Contract Management (Phase 2)
+
+**Location:** `modules/HR/resources/js/components/contracts/`
+
+*   **`ContractHistory.vue` (Likely part of Employee Detail View)**
+    *   **Props:** `employeeId` (number).
+    *   **Data:** `contracts` (array), `isLoading`.
+    *   **Methods:** `fetchContracts()`, `handleEditContract(contract)`, `handleTerminateContract(contract)`.
+    *   **API Calls:** GET `/api/hr/employees/{employeeId}/contracts`.
+    *   **Child Components:** `ResourceTable` (configured for contracts), `ContractFormModal`, `TerminateContractModal`.
+    *   **Responsibility:** Displays a list of contracts for an employee. Allows viewing details, editing (if permissible), or initiating early termination.
+
+*   **`ContractFormModal.vue`**
+    *   **Props:** `contract` (object, for editing), `employeeId` (number, for creating), `isVisible`.
+    *   **Data:** `formData` (all contract fields: contract_type, start_date, end_date, job_title_snapshot, department_snapshot, salary details, etc.), `formErrors`.
+    *   **Reference Data Props (from store/parent):** `contractTypesList`, `salaryFrequenciesList`, `contractStatusesList`.
+    *   **Methods:** `submitContract()`, `close()`.
+    *   **API Calls:** POST `/api/hr/employees/{employeeId}/contracts` (create), PUT `/api/hr/contracts/{contract.id}` (update).
+    *   **Responsibility:** Form for creating or editing contract details.
+
+*   **`TerminateContractModal.vue`**
+    *   **Props:** `contract` (object), `isVisible`.
+    *   **Data:** `formData` (termination_reason, termination_date), `formErrors`.
+    *   **Methods:** `submitTermination()`, `close()`.
+    *   **API Calls:** POST `/api/hr/contracts/{contract.id}/terminate`.
+    *   **Responsibility:** Form to capture reason and date for early termination of a contract.
+
 This conceptual outline provides a basis for the frontend development. Actual implementation would involve creating these `.vue` files, writing template markup, script logic, and styling.

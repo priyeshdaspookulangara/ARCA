@@ -34,19 +34,28 @@ class EmployeeApiTest extends TestCase
             'is_vacant' => true,
         ]);
 
-        $this->filledPosition = Position::factory()->create([
+        // Create a position that will be filled by existingEmployee
+        $positionForExisting = Position::factory()->create([
             'hr_department_id' => $this->department->id,
             'hr_job_id' => $this->job->id,
-            'is_vacant' => false, // Will be filled by existingEmployee
+            'is_vacant' => true, // Initially vacant
         ]);
 
         $this->existingEmployee = Employee::factory()->create([
-            'hr_position_id' => $this->filledPosition->id,
+            'hr_position_id' => $positionForExisting->id,
             'hr_department_id' => $this->department->id,
+            // Provide initial contract data for existing employee during setup
+            'contract_type' => Contract::TYPE_PERMANENT,
+            'contract_start_date' => now()->subMonths(6)->toDateString(),
+            'salary_amount' => 60000,
         ]);
-        // Ensure the filledPosition is marked as not vacant
-        $this->filledPosition->is_vacant = false;
-        $this->filledPosition->save();
+
+        // Update the position to be filled after employee creation.
+        // The EmployeeController's store method handles this for new employees.
+        // For setup, we do it manually.
+        $positionForExisting->is_vacant = false;
+        $positionForExisting->save();
+        $this->filledPosition = $positionForExisting; // Assign to class property for tests
 
     }
 
@@ -61,15 +70,34 @@ class EmployeeApiTest extends TestCase
             'employment_status' => 'active',
             'hr_position_id' => $this->vacantPosition->id,
             'hr_department_id' => $this->department->id, // Should match position's department
+            // Default contract details for new hires in tests
+            'contract_type' => Contract::TYPE_PERMANENT,
+            'contract_start_date' => now()->subDay()->toDateString(), // Consistent with hire_date or after
+            'salary_amount' => $this->faker->numberBetween(40000, 120000),
+            'salary_currency' => 'USD',
+            'salary_frequency' => Contract::FREQUENCY_ANNUAL,
         ], $overrides);
     }
 
     public function test_can_get_all_employees()
     {
         // We have one existingEmployee from setup, create 2 more
-        Employee::factory()->count(2)->create([
-             'hr_department_id' => $this->department->id, // ensure they have a department for consistency
-        ]);
+        // Ensure contract details are provided if your factory/controller requires them for Employee creation.
+        // The factory in this test suite does not automatically create contracts.
+        // The controller's 'store' method now expects contract fields.
+        for ($i = 0; $i < 2; $i++) {
+            $this->postJson('/api/hr/employees', $this->getValidEmployeeData([
+                'employee_id_number' => $this->faker->unique()->numerify('EMP-TEST-#####'),
+                'work_email' => $this->faker->unique()->safeEmail,
+                 // new vacant position for each new employee
+                'hr_position_id' => Position::factory()->create([
+                    'hr_department_id' => $this->department->id,
+                    'hr_job_id' => $this->job->id,
+                    'is_vacant' => true,
+                ])->id,
+            ]));
+        }
+
 
         $response = $this->getJson('/api/hr/employees');
 
@@ -88,6 +116,15 @@ class EmployeeApiTest extends TestCase
 
         $this->assertDatabaseHas('hr_employees', ['employee_id_number' => $data['employee_id_number']]);
         $this->assertDatabaseHas('hr_positions', ['id' => $this->vacantPosition->id, 'is_vacant' => false]);
+        $this->assertDatabaseHas('hr_personnel_actions', [
+            'hr_employee_id' => Employee::where('employee_id_number', $data['employee_id_number'])->first()->id,
+            'action_type' => PersonnelAction::ACTION_TYPE_HIRE
+        ]);
+        $this->assertDatabaseHas('hr_contracts', [
+            'hr_employee_id' => Employee::where('employee_id_number', $data['employee_id_number'])->first()->id,
+            'contract_type' => $data['contract_type'],
+            'salary_amount' => $data['salary_amount']
+        ]);
     }
 
     public function test_create_employee_fails_if_assigned_position_is_already_filled()

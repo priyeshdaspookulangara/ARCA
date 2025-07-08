@@ -121,4 +121,35 @@ class Employee extends Model
             $query->where('reports_to_position_id', $this->hr_position_id);
         })->get();
     }
+
+    /**
+     * Get all personnel actions for the employee.
+     */
+    public function personnelActions()
+    {
+        return $this->hasMany(PersonnelAction::class, 'hr_employee_id')->orderBy('effective_date', 'desc');
+    }
+
+    /**
+     * Get all contracts for the employee.
+     */
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class, 'hr_employee_id')->orderBy('start_date', 'desc');
+    }
+
+    /**
+     * Get the current active contract for the employee.
+     */
+    public function currentContract()
+    {
+        return $this->hasOne(Contract::class, 'hr_employee_id')
+                    ->where('status', Contract::STATUS_ACTIVE)
+                    ->where('start_date', '<=', now())
+                    ->where(function ($query) {
+                        $query->whereNull('end_date')
+                              ->orWhere('end_date', '>=', now());
+                    })
+                    ->latest('start_date'); // Get the most recent active contract
+    }
 }

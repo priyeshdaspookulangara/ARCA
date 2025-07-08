@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Modules\HR\PersonnelAdmin\Domain\Entities\Employee;
 use Modules\HR\PersonnelAdmin\Domain\Entities\Position;
 use Modules\HR\PersonnelAdmin\Domain\Entities\Department;
+use Modules\HR\PersonnelAdmin\Domain\Entities\PersonnelAction;
+use Modules\HR\PersonnelAdmin\Domain\Entities\Contract;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB; // For transactions if needed
 
@@ -89,6 +91,15 @@ class EmployeeController extends Controller
                 'integer',
                 Rule::exists('hr_departments', 'id'),
             ],
+            // Contract specific fields for initial contract on hire
+            'contract_type' => ['required', 'string', Rule::in([Contract::TYPE_PERMANENT, Contract::TYPE_FIXED_TERM, Contract::TYPE_INTERNSHIP, Contract::TYPE_PART_TIME])],
+            'contract_start_date' => 'required|date|after_or_equal:hire_date',
+            'contract_end_date' => 'nullable|date|after:contract_start_date',
+            'salary_amount' => 'required|numeric|min:0',
+            'salary_currency' => 'sometimes|string|size:3',
+            'salary_frequency' => ['sometimes','string', Rule::in([Contract::FREQUENCY_HOURLY, Contract::FREQUENCY_DAILY, Contract::FREQUENCY_WEEKLY, Contract::FREQUENCY_MONTHLY, Contract::FREQUENCY_ANNUAL])],
+            'working_hours_per_week' => 'nullable|numeric|min:0|max:168', // 168 hours in a week
+            'probation_period_months' => 'nullable|integer|min:0',
             // Add other fillable fields from Employee model here
         ]);
 
@@ -118,6 +129,7 @@ class EmployeeController extends Controller
             $employee = Employee::create($validated);
 
             // If position is assigned, mark it as not vacant
+            $position = null;
             if ($employee->hr_position_id) {
                 $position = Position::find($employee->hr_position_id);
                 if ($position) {
@@ -126,8 +138,40 @@ class EmployeeController extends Controller
                 }
             }
 
+            // Create PersonnelAction for 'hire'
+            PersonnelAction::create([
+                'hr_employee_id' => $employee->id,
+                'action_type' => PersonnelAction::ACTION_TYPE_HIRE,
+                'effective_date' => $employee->hire_date,
+                'details_json' => [
+                    'position_id' => $employee->hr_position_id,
+                    'department_id' => $employee->hr_department_id,
+                    'work_email' => $employee->work_email,
+                ],
+                'status' => PersonnelAction::STATUS_EXECUTED, // Hire action is typically executed immediately
+                'executed_at' => now(),
+                // 'created_by_user_id' => auth()->id(), // If auth is set up
+            ]);
+
+            // Create initial Contract
+            Contract::create([
+                'hr_employee_id' => $employee->id,
+                'contract_type' => $validated['contract_type'],
+                'start_date' => $validated['contract_start_date'],
+                'end_date' => $validated['contract_end_date'] ?? null,
+                'job_title_snapshot' => $position ? $position->job->job_title : $employee->job_title_placeholder ?? 'N/A', // A placeholder if no position
+                'department_snapshot' => $position ? $position->department->name : $employee->department_placeholder ?? 'N/A', // A placeholder
+                'salary_amount' => $validated['salary_amount'],
+                'salary_currency' => $validated['salary_currency'] ?? 'USD',
+                'salary_frequency' => $validated['salary_frequency'] ?? Contract::FREQUENCY_MONTHLY,
+                'working_hours_per_week' => $validated['working_hours_per_week'] ?? null,
+                'probation_period_months' => $validated['probation_period_months'] ?? null,
+                'status' => Contract::STATUS_ACTIVE, // Assuming contract is active upon hire completion
+            ]);
+
+
             DB::commit();
-            return response()->json($employee->load(['position', 'department']), 201);
+            return response()->json($employee->load(['position', 'department', 'contracts', 'personnelActions']), 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
