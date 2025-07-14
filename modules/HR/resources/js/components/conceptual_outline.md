@@ -205,4 +205,45 @@ This document outlines the conceptual Vue.js components for managing Departments
     *   **API Calls:** PUT `/api/hr/leave-requests/{leaveRequest.id}`.
     *   **Responsibility:** Form/modal for a manager/admin to add remarks and confirm approval or rejection of a leave request.
 
+---
+## 8. Payroll Management (Phase 4)
+
+**Location:** `modules/HR/resources/js/components/payroll/`
+
+*   **Admin: `PayrollPeriodManagement.vue` (Page Component)**
+    *   **Data:** `periods` (array), `isLoading`, `showCreateModal` (boolean).
+    *   **Methods:** `fetchPeriods()`, `openCreateModal()`, `createPeriod(periodData)`, `viewPeriodPayslips(period)`.
+    *   **API Calls:** GET, POST `/api/hr/payroll/periods`.
+    *   **Child Components:** `ResourceTable` (for periods), `PayrollPeriodFormModal`.
+    *   **Responsibility:** Admin interface for viewing and creating payroll periods.
+
+*   **Admin: `PayrollPeriodFormModal.vue`**
+    *   **Props:** `isVisible`.
+    *   **Data:** `formData` (name, start_date, end_date, payment_date), `formErrors`.
+    *   **Methods:** `submitForm()`.
+    *   **Responsibility:** Form to create a new payroll period.
+
+*   **Admin: `PayslipList.vue` (Page Component for a specific period)**
+    *   **Props:** `payrollPeriodId` (number).
+    *   **Data:** `payslips` (array), `period` (object), `isLoading`.
+    *   **Methods:** `fetchPayslips()`, `generateDrafts()`, `viewPayslip(payslip)`.
+    *   **API Calls:** GET `/api/hr/payroll/periods/{id}/payslips`, POST `/api/hr/payroll/periods/{id}/generate-drafts`.
+    *   **Child Components:** `ResourceTable` (for payslips).
+    *   **Responsibility:** Displays a list of payslips for a given period. Includes a button to trigger the 'Generate Drafts' process.
+
+*   **Shared: `PayslipDetailView.vue` (Component or Page)**
+    *   **Props:** `payslipId` (number).
+    *   **Data:** `payslip` (object, includes items, employee, period), `isLoading`.
+    *   **Methods:** `fetchPayslip()`.
+    *   **API Calls:** GET `/api/hr/payroll/payslips/{id}`.
+    *   **Responsibility:** Displays a detailed view of a single payslip, neatly formatted with employee details, period info, and a breakdown of all earnings and deductions. Could be used in a modal or on a dedicated page.
+
+*   **Employee: `MyPayslips.vue` (Page Component)**
+    *   **Props:** `employeeId` (number, from auth store).
+    *   **Data:** `payslips` (array), `isLoading`.
+    *   **Methods:** `fetchMyPayslips()`, `viewPayslipDetail(payslip)`.
+    *   **API Calls:** GET `/api/hr/employees/{id}/payslips`.
+    *   **Child Components:** `ResourceTable` (for payslip history), `PayslipDetailView` (likely in a modal).
+    *   **Responsibility:** Displays a list of the employee's past payslips.
+
 This conceptual outline provides a basis for the frontend development. Actual implementation would involve creating these `.vue` files, writing template markup, script logic, and styling.

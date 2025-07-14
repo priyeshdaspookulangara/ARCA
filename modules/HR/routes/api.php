@@ -50,5 +50,17 @@ Route::prefix('hr')->name('hr.api.')->group(function () {
     Route::get('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'show'])->name('leaveRequests.show');
     Route::put('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'update'])->name('leaveRequests.update'); // For status changes (approve, reject, cancel)
 
+    // Payroll
+    Route::prefix('payroll')->name('payroll.')->group(function () {
+        Route::get('periods', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'listPeriods'])->name('periods.list');
+        Route::post('periods', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'createPeriod'])->name('periods.create');
+        Route::post('periods/{payrollPeriod}/generate-drafts', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'generateDraftPayslips'])->name('periods.generateDrafts');
+        Route::get('periods/{payrollPeriod}/payslips', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'listPayslipsForPeriod'])->name('periods.payslips.list');
+
+        Route::get('payslips/{payslip}', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'showPayslip'])->name('payslips.show');
+    });
+    Route::get('employees/{employee}/payslips', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'listPayslipsForEmployee'])->name('employees.payslips.list');
+
+
     // Future HR API routes related to Personnel Administration can be added here.
 });

@@ -13,6 +13,7 @@
         "psr-4": {
             "Modules\HR\": "src/",
             "Modules\HR\TimeManagement\": "src/TimeManagement/",
+            "Modules\HR\Payroll\": "src/Payroll/",
             "Modules\HR\Database\Factories\": "database/factories/",
             "Modules\HR\Database\Seeders\": "database/seeders/"
         }

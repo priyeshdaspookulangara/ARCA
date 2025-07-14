@@ -42,7 +42,11 @@ class HRServiceProvider extends ServiceProvider
     public function register()
     {
         // $this->app->register(RouteServiceProvider::class);
-        // Register other services, repositories, etc.
+
+        // Register services, repositories, etc.
+        $this->app->bind(\Modules\HR\Payroll\Services\PayrollService::class, function ($app) {
+            return new \Modules\HR\Payroll\Services\PayrollService();
+        });
 
         // If you have module-specific commands:
         // $this->commands([]);
