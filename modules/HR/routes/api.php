@@ -61,6 +61,29 @@ Route::prefix('hr')->name('hr.api.')->group(function () {
     });
     Route::get('employees/{employee}/payslips', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'listPayslipsForEmployee'])->name('employees.payslips.list');
 
+    // Talent Management - Recruitment
+    Route::prefix('recruitment')->name('recruitment.')->group(function () {
+        // Public endpoint to apply for a job
+        Route::post('jobs/{job}/apply', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'apply'])->name('jobs.apply');
+
+        // Admin/Recruiter endpoints for managing applications
+        Route::get('applications', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'index'])->name('applications.index');
+        Route::get('applications/{application}', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'show'])->name('applications.show');
+        Route::put('applications/{application}', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'update'])->name('applications.update');
+        Route::delete('applications/{application}', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'destroy'])->name('applications.destroy');
+        Route::get('applications/{application}/resume', [\Modules\HR\TalentManagement\Http\Controllers\JobApplicationController::class, 'downloadResume'])->name('applications.downloadResume');
+    });
+
+    // Talent Management - Performance
+    Route::prefix('performance')->name('performance.')->group(function () {
+        Route::get('reviews', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'index'])->name('reviews.indexAll');
+        Route::get('reviews/{review}', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'show'])->name('reviews.show');
+        Route::put('reviews/{review}', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'update'])->name('reviews.update');
+        Route::delete('reviews/{review}', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'destroy'])->name('reviews.destroy');
+    });
+    Route::get('employees/{employee}/performance-reviews', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'index'])->name('employees.reviews.index');
+    Route::post('employees/{employee}/performance-reviews', [\Modules\HR\TalentManagement\Http\Controllers\PerformanceReviewController::class, 'store'])->name('employees.reviews.store');
+
 
     // Future HR API routes related to Personnel Administration can be added here.
 });

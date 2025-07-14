@@ -29,4 +29,12 @@ class Job extends Model
     {
         return $this->hasMany(Position::class, 'hr_job_id');
     }
+
+    /**
+     * Get all applications for this job.
+     */
+    public function applications()
+    {
+        return $this->hasMany(\Modules\HR\TalentManagement\Domain\Entities\JobApplication::class, 'hr_job_id');
+    }
 }
