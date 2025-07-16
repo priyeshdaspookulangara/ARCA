@@ -5,6 +5,8 @@ namespace Modules\HR\Payroll\Domain\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Modules\HR\Payroll\Domain\Entities\Payslip;
+use Modules\HR\Payroll\Domain\Entities\EarningType;
+use Modules\HR\Payroll\Domain\Entities\DeductionType;
 
 class PayslipItem extends Model
 {
@@ -16,6 +18,8 @@ class PayslipItem extends Model
 
     protected $fillable = [
         'hr_payslip_id',
+        'earning_type_id',
+        'deduction_type_id',
         'item_type',
         'description',
         'amount',
@@ -34,6 +38,23 @@ class PayslipItem extends Model
     {
         return $this->belongsTo(Payslip::class, 'hr_payslip_id');
     }
+
+    /**
+     * Get the earning type for this item (if applicable).
+     */
+    public function earningType()
+    {
+        return $this->belongsTo(EarningType::class, 'earning_type_id');
+    }
+
+    /**
+     * Get the deduction type for this item (if applicable).
+     */
+    public function deductionType()
+    {
+        return $this->belongsTo(DeductionType::class, 'deduction_type_id');
+    }
+
 
     // Define constants for item types
     public const TYPE_EARNING = 'earning';

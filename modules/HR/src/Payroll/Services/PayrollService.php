@@ -124,17 +124,82 @@ class PayrollService
      * @param Contract $contract
      * @return float
      */
-    private function calculateBaseSalary(Contract $contract): float
+    private function calculateProratedSalary(Employee $employee, Contract $contract, PayrollPeriod $payrollPeriod): float
     {
+        $monthlySalary = 0;
         switch ($contract->salary_frequency) {
             case Contract::FREQUENCY_ANNUAL:
-                return round($contract->salary_amount / 12, 2);
+                $monthlySalary = $contract->salary_amount / 12;
+                break;
             case Contract::FREQUENCY_MONTHLY:
-                return (float)$contract->salary_amount;
-            // Add cases for weekly, daily, hourly if needed
+                $monthlySalary = (float)$contract->salary_amount;
+                break;
             default:
-                return (float)$contract->salary_amount;
+                $monthlySalary = (float)$contract->salary_amount;
         }
+
+        // --- Proration Logic ---
+        $periodStart = Carbon::instance($payrollPeriod->start_date);
+        $periodEnd = Carbon::instance($payrollPeriod->end_date);
+        $hireDate = Carbon::instance($employee->hire_date);
+        $terminationDate = $employee->termination_date ? Carbon::instance($employee->termination_date) : null;
+
+        $isNewHireInPeriod = $hireDate->isBetween($periodStart, $periodEnd);
+        $isTerminatedInPeriod = $terminationDate && $terminationDate->isBetween($periodStart, $periodEnd);
+
+        if (!$isNewHireInPeriod && !$isTerminatedInPeriod) {
+            return round($monthlySalary, 2); // No proration needed
+        }
+
+        $totalDaysInMonth = $periodStart->daysInMonth;
+        if ($totalDaysInMonth === 0) return 0;
+
+        $effectiveStartDate = $isNewHireInPeriod ? $hireDate : $periodStart;
+        $effectiveEndDate = $isTerminatedInPeriod ? $terminationDate : $periodEnd;
+
+        $payableDays = 0;
+        if ($effectiveEndDate->gte($effectiveStartDate)) {
+            $payableDays = $effectiveStartDate->diffInDays($effectiveEndDate) + 1;
+        }
+
+        $payableDays = min($payableDays, $totalDaysInMonth);
+        $dailyRate = $monthlySalary / $totalDaysInMonth;
+        $proratedSalary = $dailyRate * $payableDays;
+
+        return round($proratedSalary, 2);
+    }
+        $periodStart = Carbon::instance($payrollPeriod->start_date);
+        $periodEnd = Carbon::instance($payrollPeriod->end_date);
+        $hireDate = Carbon::instance($employee->hire_date);
+        $terminationDate = $employee->termination_date ? Carbon::instance($employee->termination_date) : null;
+
+        // Check if proration is needed
+        $isNewHireInPeriod = $hireDate->isBetween($periodStart, $periodEnd);
+        $isTerminatedInPeriod = $terminationDate && $terminationDate->isBetween($periodStart, $periodEnd);
+
+        if (!$isNewHireInPeriod && !$isTerminatedInPeriod) {
+            return round($monthlySalary, 2); // No proration needed
+        }
+
+        $totalDaysInMonth = $periodStart->daysInMonth;
+        if ($totalDaysInMonth === 0) return 0; // Avoid division by zero
+
+        $payableDays = 0;
+        $effectiveStartDate = $isNewHireInPeriod ? $hireDate : $periodStart;
+        $effectiveEndDate = $isTerminatedInPeriod ? $terminationDate : $periodEnd;
+
+        // Calculate payable days within the period
+        if ($effectiveEndDate->gte($effectiveStartDate)) {
+            $payableDays = $effectiveStartDate->diffInDays($effectiveEndDate) + 1;
+        }
+
+        // Ensure payable days doesn't exceed total days in month
+        $payableDays = min($payableDays, $totalDaysInMonth);
+
+        $dailyRate = $monthlySalary / $totalDaysInMonth;
+        $proratedSalary = $dailyRate * $payableDays;
+
+        return round($proratedSalary, 2);
     }
 
     /**
