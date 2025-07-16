@@ -50,6 +50,10 @@ Route::prefix('hr')->name('hr.api.')->group(function () {
     Route::get('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'show'])->name('leaveRequests.show');
     Route::put('leave-requests/{leaveRequest}', [\Modules\HR\TimeManagement\Http\Controllers\LeaveRequestController::class, 'update'])->name('leaveRequests.update'); // For status changes (approve, reject, cancel)
 
+    // Time Management - Leave Balances
+    Route::get('employees/{employee}/leave-balances', [\Modules\HR\TimeManagement\Http\Controllers\LeaveBalanceController::class, 'index'])->name('employees.leaveBalances.index');
+    Route::post('employees/{employee}/leave-balances', [\Modules\HR\TimeManagement\Http\Controllers\LeaveBalanceController::class, 'upsert'])->name('employees.leaveBalances.upsert'); // Admin manual adjustment
+
     // Payroll
     Route::prefix('payroll')->name('payroll.')->group(function () {
         Route::get('periods', [\Modules\HR\Payroll\Http\Controllers\PayrollController::class, 'listPeriods'])->name('periods.list');

@@ -11,6 +11,7 @@ use Modules\HR\TimeManagement\Domain\Entities\LeaveRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth; // Assuming auth for user IDs
 use Carbon\Carbon;
+use Modules\HR\TimeManagement\Services\LeaveBalanceService;
 
 class LeaveRequestController extends Controller
 {
@@ -181,6 +182,15 @@ class LeaveRequestController extends Controller
                 'rejection_reason' => ($request->input('status') === LeaveRequest::STATUS_REJECTED) ? 'required|string|max:1000' : 'nullable|string|max:1000',
             ]);
 
+        $leaveBalanceService = new LeaveBalanceService();
+
+        // If approving, check balance first
+        if ($validatedStatusUpdate['status'] === LeaveRequest::STATUS_APPROVED) {
+            if (!$leaveBalanceService->hasSufficientBalance($leaveRequest)) {
+                return response()->json(['error' => 'Insufficient leave balance for this request.'], 422);
+            }
+        }
+
             $leaveRequest->status = $validatedStatusUpdate['status'];
             $leaveRequest->approver_remarks = $validatedStatusUpdate['approver_remarks'] ?? null;
             // $leaveRequest->approver_user_id = $user->id; // Assuming Auth gives the manager/admin ID
@@ -188,6 +198,7 @@ class LeaveRequestController extends Controller
             if ($leaveRequest->status === LeaveRequest::STATUS_APPROVED) {
                 $leaveRequest->approved_at = now();
                 $leaveRequest->rejection_reason = null; // Clear rejection reason if any
+            $leaveBalanceService->debitApprovedLeave($leaveRequest);
             } elseif ($leaveRequest->status === LeaveRequest::STATUS_REJECTED) {
                 $leaveRequest->rejected_at = now();
                 $leaveRequest->rejection_reason = $validatedStatusUpdate['rejection_reason'];
@@ -205,11 +216,20 @@ class LeaveRequestController extends Controller
             $validatedCancel = $request->validate([
                 'cancellation_reason' => 'required|string|max:1000', // Custom field for admin cancellation reason
             ]);
+
+        $originalStatus = $leaveRequest->getOriginal('status');
+
             $leaveRequest->status = LeaveRequest::STATUS_CANCELLED_BY_ADMIN;
             $leaveRequest->cancelled_at = now();
             $leaveRequest->cancelled_by_role = LeaveRequest::CANCELLED_BY_ADMIN_ROLE; // Or manager
             $leaveRequest->approver_remarks = ($leaveRequest->approver_remarks ? $leaveRequest->approver_remarks . "\n" : '') . "Cancelled by admin/manager: " . $validatedCancel['cancellation_reason'];
             $leaveRequest->save();
+
+        // If the request was previously approved, credit the leave back
+        if ($originalStatus === LeaveRequest::STATUS_APPROVED) {
+            (new LeaveBalanceService())->creditCancelledLeave($leaveRequest);
+        }
+
             return response()->json($leaveRequest);
         }
 
