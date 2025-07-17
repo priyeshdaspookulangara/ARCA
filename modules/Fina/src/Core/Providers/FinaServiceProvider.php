@@ -22,6 +22,10 @@ class FinaServiceProvider extends ServiceProvider
      *
      * @return void
      */
+use Illuminate\Support\Facades\Event;
+use Modules\Fina\Listeners\HR\PayrollRunCompletedListener;
+use Modules\Fina\Listeners\SD\SalesOrderBilledListener;
+
     public function boot()
     {
         $this->registerTranslations();
@@ -29,6 +33,16 @@ class FinaServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
         $this->loadRoutes();
+
+        Event::listen(
+            'Modules\HR\Events\PayrollRunCompletedEvent',
+            [PayrollRunCompletedListener::class, 'handle']
+        );
+
+        Event::listen(
+            'Modules\SD\Events\SalesOrderBilledEvent',
+            [SalesOrderBilledListener::class, 'handle']
+        );
     }
 
     /**
