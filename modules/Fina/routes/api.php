@@ -1,10 +1,29 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
 
-// Example Fina API Route
-// Route::get('/fina/status', [Modules\Fina\Http\Controllers\FinaStatusController::class, 'index']);
+use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
+use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 
-Route::get('/fina-status-check', function () {
-    return response()->json(['module' => 'Fina', 'status' => 'active_via_api_route']);
+Route::prefix('fina')->group(function () {
+    Route::prefix('gl')->group(function () {
+        Route::post('documents', [GLDocumentController::class, 'store']);
+        Route::get('documents/{id}', [GLDocumentController::class, 'show']);
+    });
+
+    Route::prefix('ap')->group(function () {
+        Route::post('invoices', [APInvoiceController::class, 'store']);
+        Route::get('invoices/{id}', [APInvoiceController::class, 'show']);
+    });
+
+    Route::prefix('ar')->group(function () {
+        Route::post('invoices', [ARInvoiceController::class, 'store']);
+        Route::get('invoices/{id}', [ARInvoiceController::class, 'show']);
+    });
+
+    Route::prefix('aa')->group(function () {
+        Route::post('assets', [AssetController::class, 'store']);
+        Route::get('assets/{id}', [AssetController::class, 'show']);
+    });
 });
