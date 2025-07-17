@@ -38,8 +38,27 @@ class HRServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // $this->app->register(RouteServiceProvider::class);
-        // Register other services, repositories, etc.
+        $this->app->singleton(\Symfony\Component\Workflow\Registry::class, function ($app) {
+            $registry = new \Symfony\Component\Workflow\Registry();
+            $workflows = config('hr.workflow');
+            foreach ($workflows as $name => $config) {
+                $transitions = [];
+                foreach ($config['transitions'] as $transitionName => $transitionConfig) {
+                    $transitions[] = new \Symfony\Component\Workflow\Transition($transitionName, $transitionConfig['from'], $transitionConfig['to']);
+                }
+
+                $workflow = new \Symfony\Component\Workflow\Workflow(
+                    $config['places'],
+                    $transitions,
+                    new \Symfony\Component\Workflow\MarkingStore\MethodMarkingStore(true, 'status'),
+                    $name
+                );
+
+                $registry->addWorkflow($workflow, $config['supports'][0]);
+            }
+
+            return $registry;
+        });
     }
 
     /**
@@ -54,6 +73,9 @@ class HRServiceProvider extends ServiceProvider
         ], 'config');
         $this->mergeConfigFrom(
             module_path($this->moduleName, 'config/config.php'), $this->moduleNameLower
+        );
+        $this->mergeConfigFrom(
+            module_path($this->moduleName, 'config/workflow.php'), 'hr.workflow'
         );
     }
 
