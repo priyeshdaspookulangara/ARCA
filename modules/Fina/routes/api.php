@@ -10,8 +10,10 @@ use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 
 Route::prefix('fina')->group(function () {
     Route::prefix('gl')->group(function () {
+        Route::get('documents', [GLDocumentController::class, 'index']);
         Route::post('documents', [GLDocumentController::class, 'store']);
         Route::get('documents/{id}', [GLDocumentController::class, 'show']);
+        Route::post('documents/{id}/reverse', [GLDocumentController::class, 'reverse']);
 
         Route::apiResource('charts-of-accounts', ChartOfAccountController::class);
         Route::apiResource('gl-accounts', GLAccountController::class);

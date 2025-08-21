@@ -19,6 +19,10 @@ class GLDocumentHeader extends Model
         'header_text',
         'transaction_currency_code',
         'created_by_user_id',
+        'reversal_reason',
+        'reversal_date',
+        'reversed_by_document_id',
+        'reverses_document_id',
     ];
 
     public function items()
