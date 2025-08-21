@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
 use Modules\Fina\FI\GL\Http\Controllers\ChartOfAccountController;
 use Modules\Fina\FI\GL\Http\Controllers\GLAccountController;
+use Modules\Fina\FI\GL\Http\Controllers\FinancialReportController;
 
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
@@ -17,6 +18,12 @@ Route::prefix('fina')->group(function () {
 
         Route::apiResource('charts-of-accounts', ChartOfAccountController::class);
         Route::apiResource('gl-accounts', GLAccountController::class);
+
+        Route::prefix('reports')->group(function () {
+            Route::get('trial-balance', [FinancialReportController::class, 'trialBalance']);
+            Route::get('profit-and-loss', [FinancialReportController::class, 'profitAndLoss']);
+            Route::get('balance-sheet', [FinancialReportController::class, 'balanceSheet']);
+        });
     });
 
     Route::prefix('ap')->group(function () {

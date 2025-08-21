@@ -28,4 +28,12 @@ class GLDocumentItem extends Model
     {
         return $this->belongsTo(GLDocumentHeader::class, 'document_header_id');
     }
+
+    /**
+     * Get the GL account associated with the document item.
+     */
+    public function glAccount()
+    {
+        return $this->belongsTo(GLAccount::class, 'gl_account_id');
+    }
 }
