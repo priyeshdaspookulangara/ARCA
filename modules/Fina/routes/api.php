@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
+use Modules\Fina\FI\GL\Http\Controllers\ChartOfAccountController;
+use Modules\Fina\FI\GL\Http\Controllers\GLAccountController;
 
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
@@ -10,6 +12,9 @@ Route::prefix('fina')->group(function () {
     Route::prefix('gl')->group(function () {
         Route::post('documents', [GLDocumentController::class, 'store']);
         Route::get('documents/{id}', [GLDocumentController::class, 'show']);
+
+        Route::apiResource('charts-of-accounts', ChartOfAccountController::class);
+        Route::apiResource('gl-accounts', GLAccountController::class);
     });
 
     Route::prefix('ap')->group(function () {

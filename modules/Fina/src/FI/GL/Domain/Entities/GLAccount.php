@@ -2,10 +2,13 @@
 
 namespace Modules\Fina\FI\GL\Domain\Entities;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class GLAccount extends Model
 {
+    use HasFactory;
+
     protected $table = 'fina_gl_accounts';
 
     protected $fillable = [
@@ -20,4 +23,22 @@ class GLAccount extends Model
         'is_open_item_managed',
         'sort_key',
     ];
+
+    /**
+     * Get the chart of accounts that owns the GL account.
+     */
+    public function chartOfAccount()
+    {
+        return $this->belongsTo(ChartOfAccount::class, 'chart_of_accounts_id');
+    }
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return \Modules\Fina\Database\Factories\GLAccountFactory::new();
+    }
 }
