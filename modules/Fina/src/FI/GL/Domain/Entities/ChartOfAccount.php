@@ -16,5 +16,6 @@ class ChartOfAccount extends Model
         'name',
         'language_key',
         'length_gl_account_number',
+        'retained_earnings_gl_account_id',
     ];
 }
