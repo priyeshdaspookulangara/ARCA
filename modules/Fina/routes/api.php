@@ -6,6 +6,7 @@ use Modules\Fina\FI\GL\Http\Controllers\ChartOfAccountController;
 use Modules\Fina\FI\GL\Http\Controllers\GLAccountController;
 use Modules\Fina\FI\GL\Http\Controllers\FinancialReportController;
 use Modules\Fina\FI\GL\Http\Controllers\ClosingOperationsController;
+use Modules\Fina\FI\GL\Http\Controllers\RecurringEntryController;
 
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
@@ -29,6 +30,9 @@ Route::prefix('fina')->group(function () {
         Route::prefix('closing-operations')->group(function () {
             Route::post('balance-carry-forward', [ClosingOperationsController::class, 'balanceCarryForward']);
         });
+
+        Route::post('recurring-entries/run', [RecurringEntryController::class, 'run']);
+        Route::apiResource('recurring-entries', RecurringEntryController::class);
     });
 
     Route::prefix('ap')->group(function () {
