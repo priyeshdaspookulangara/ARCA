@@ -42,10 +42,29 @@ class GLDocumentController extends Controller
         return response()->json($documents);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $data = $request->all();
-        $document = ($this->postJournalDocumentService)($data);
+        $validated = $request->validate([
+            'company_code_id' => 'required|integer|exists:fina_company_codes,id',
+            'document_date' => 'required|date',
+            'posting_date' => 'required|date',
+            'document_type' => 'required|string|max:4',
+            'transaction_currency_code' => 'required|string|max:3',
+            'reference_text' => 'nullable|string|max:255',
+            'header_text' => 'nullable|string|max:255',
+            'is_reversing_entry' => 'sometimes|boolean',
+            'reverses_on_date' => 'required_if:is_reversing_entry,true|date|after:posting_date',
+            'items' => 'required|array|min:2',
+            'items.*.gl_account_id' => 'required|integer|exists:fina_gl_accounts,id',
+            'items.*.posting_type' => ['required', \Illuminate\Validation\Rule::in(['Debit', 'Credit'])],
+            'items.*.amount_transaction_currency' => 'required|numeric|min:0.01',
+            'items.*.item_text' => 'nullable|string',
+        ]);
+
+        // TODO: Add validation for balanced document (debits === credits)
+
+        $document = ($this->postJournalDocumentService)($validated);
+
         return response()->json($document, 201);
     }
 

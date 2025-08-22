@@ -23,6 +23,8 @@ class GLDocumentHeader extends Model
         'reversal_date',
         'reversed_by_document_id',
         'reverses_document_id',
+        'is_reversing_entry',
+        'reverses_on_date',
     ];
 
     public function items()

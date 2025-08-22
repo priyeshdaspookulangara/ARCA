@@ -29,6 +29,7 @@ Route::prefix('fina')->group(function () {
 
         Route::prefix('closing-operations')->group(function () {
             Route::post('balance-carry-forward', [ClosingOperationsController::class, 'balanceCarryForward']);
+            Route::post('run-accrual-reversals', [ClosingOperationsController::class, 'runAccrualReversals']);
         });
 
         Route::post('recurring-entries/run', [RecurringEntryController::class, 'run']);

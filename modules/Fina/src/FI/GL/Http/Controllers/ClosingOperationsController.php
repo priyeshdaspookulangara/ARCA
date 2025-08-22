@@ -6,6 +6,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Fina\FI\GL\Application\BalanceCarryForwardService;
+use Modules\Fina\FI\GL\Application\RunAccrualReversalsService;
+use Carbon\Carbon;
 
 class ClosingOperationsController extends Controller
 {
@@ -31,5 +33,18 @@ class ClosingOperationsController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => $e->getMessage()], 400);
         }
+    }
+
+    public function runAccrualReversals(Request $request, RunAccrualReversalsService $runService): JsonResponse
+    {
+        $validated = $request->validate([
+            'run_date' => 'nullable|date',
+        ]);
+
+        $runDate = isset($validated['run_date']) ? Carbon::parse($validated['run_date']) : Carbon::now();
+
+        $results = $runService->handle($runDate);
+
+        return response()->json($results);
     }
 }
