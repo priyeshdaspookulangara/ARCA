@@ -8,6 +8,7 @@ use Illuminate\Routing\Controller;
 use Modules\Fina\FI\GL\Application\TrialBalanceReportService;
 use Modules\Fina\FI\GL\Application\PAndLReportService;
 use Modules\Fina\FI\GL\Application\BalanceSheetReportService;
+use Modules\Fina\FI\GL\Application\CashFlowStatementService;
 use Carbon\Carbon;
 
 class FinancialReportController extends Controller
@@ -74,6 +75,23 @@ class FinancialReportController extends Controller
         $reportData = $reportService->handle(
             $validated['company_code_id'],
             Carbon::parse($validated['as_of_date'])
+        );
+
+        return response()->json($reportData);
+    }
+
+    public function cashFlowStatement(Request $request, CashFlowStatementService $reportService): JsonResponse
+    {
+        $validated = $request->validate([
+            'company_code_id' => 'required|integer|exists:fina_company_codes,id',
+            'from_date' => 'required|date',
+            'to_date' => 'required|date|after_or_equal:from_date',
+        ]);
+
+        $reportData = $reportService->handle(
+            $validated['company_code_id'],
+            Carbon::parse($validated['from_date']),
+            Carbon::parse($validated['to_date'])
         );
 
         return response()->json($reportData);

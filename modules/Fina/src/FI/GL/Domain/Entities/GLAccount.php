@@ -16,6 +16,7 @@ class GLAccount extends Model
         'account_number',
         'name',
         'account_type',
+        'classification',
         'gl_account_group_id',
         'is_reconciliation_account_for',
         'tax_category_id',

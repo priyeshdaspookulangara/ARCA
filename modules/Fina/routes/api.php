@@ -25,6 +25,7 @@ Route::prefix('fina')->group(function () {
             Route::get('trial-balance', [FinancialReportController::class, 'trialBalance']);
             Route::get('profit-and-loss', [FinancialReportController::class, 'profitAndLoss']);
             Route::get('balance-sheet', [FinancialReportController::class, 'balanceSheet']);
+            Route::get('cash-flow-statement', [FinancialReportController::class, 'cashFlowStatement']);
         });
 
         Route::prefix('closing-operations')->group(function () {
