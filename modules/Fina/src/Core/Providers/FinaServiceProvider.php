@@ -4,6 +4,15 @@ namespace Modules\Fina\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Modules\Fina\FI\BL\Domain\Repositories\BankMasterRepositoryInterface;
+use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankMasterRepository;
+use Modules\Fina\FI\BL\Domain\Repositories\BankAccountRepositoryInterface;
+use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankAccountRepository;
+use Modules\Fina\FI\BL\Domain\Repositories\BankStatementRepositoryInterface;
+use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepository;
+use Modules\Fina\FI\BL\Application\BankMasterService;
+use Modules\Fina\FI\BL\Application\BankAccountService;
+use Modules\Fina\FI\BL\Application\BankStatementService;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -38,11 +47,20 @@ class FinaServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // $this->app->register(RouteServiceProvider::class); // Example if module has its own RouteServiceProvider
-        // Register other services, repositories, event listeners etc. for Fina module
-        $this->app->singleton('fina', function ($app) {
-            // return new FinaModuleService(); // Example of a core service for the module
-            return new \stdClass(); // Placeholder
+        $this->app->bind(BankMasterRepositoryInterface::class, EloquentBankMasterRepository::class);
+        $this->app->bind(BankAccountRepositoryInterface::class, EloquentBankAccountRepository::class);
+        $this->app->bind(BankStatementRepositoryInterface::class, EloquentBankStatementRepository::class);
+
+        $this->app->singleton(BankMasterService::class, function ($app) {
+            return new BankMasterService($app->make(BankMasterRepositoryInterface::class));
+        });
+
+        $this->app->singleton(BankAccountService::class, function ($app) {
+            return new BankAccountService($app->make(BankAccountRepositoryInterface::class));
+        });
+
+        $this->app->singleton(BankStatementService::class, function ($app) {
+            return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
     }
 

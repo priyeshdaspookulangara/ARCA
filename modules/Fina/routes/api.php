@@ -2,9 +2,11 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
-
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
+use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
+use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
+use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
 
 Route::prefix('fina')->group(function () {
     Route::prefix('gl')->group(function () {
@@ -25,5 +27,22 @@ Route::prefix('fina')->group(function () {
     Route::prefix('aa')->group(function () {
         Route::post('assets', [AssetController::class, 'store']);
         Route::get('assets/{id}', [AssetController::class, 'show']);
+    });
+
+    Route::prefix('bl')->group(function () {
+        Route::post('banks', [BankMasterController::class, 'store']);
+        Route::get('banks/{id}', [BankMasterController::class, 'show']);
+        Route::put('banks/{id}', [BankMasterController::class, 'update']);
+        Route::delete('banks/{id}', [BankMasterController::class, 'destroy']);
+
+        Route::post('bank-accounts', [BankAccountController::class, 'store']);
+        Route::get('bank-accounts/{id}', [BankAccountController::class, 'show']);
+        Route::put('bank-accounts/{id}', [BankAccountController::class, 'update']);
+        Route::delete('bank-accounts/{id}', [BankAccountController::class, 'destroy']);
+
+        Route::post('bank-statements', [BankStatementController::class, 'store']);
+        Route::get('bank-statements/{id}', [BankStatementController::class, 'show']);
+        Route::put('bank-statements/{id}', [BankStatementController::class, 'update']);
+        Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
     });
 });
