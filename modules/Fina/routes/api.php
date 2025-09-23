@@ -7,6 +7,12 @@ use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
+use Modules\Fina\PC\Http\Controllers\MaterialCostController;
+use Modules\Fina\PC\Http\Controllers\InventoryValuationController;
+use Modules\Fina\PC\Http\Controllers\CostObjectControllingController;
+use Modules\Fina\PC\Http\Controllers\MaterialCostController;
+use Modules\Fina\PC\Http\Controllers\InventoryValuationController;
+use Modules\Fina\PC\Http\Controllers\CostObjectControllingController;
 
 Route::prefix('fina')->group(function () {
     Route::prefix('gl')->group(function () {
@@ -44,5 +50,22 @@ Route::prefix('fina')->group(function () {
         Route::get('bank-statements/{id}', [BankStatementController::class, 'show']);
         Route::put('bank-statements/{id}', [BankStatementController::class, 'update']);
         Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
+    });
+
+    Route::prefix('pc')->group(function () {
+        Route::post('material-costs', [MaterialCostController::class, 'store']);
+        Route::get('material-costs/{id}', [MaterialCostController::class, 'show']);
+        Route::put('material-costs/{id}', [MaterialCostController::class, 'update']);
+        Route::delete('material-costs/{id}', [MaterialCostController::class, 'destroy']);
+
+        Route::post('inventory-valuations', [InventoryValuationController::class, 'store']);
+        Route::get('inventory-valuations/{id}', [InventoryValuationController::class, 'show']);
+        Route::put('inventory-valuations/{id}', [InventoryValuationController::class, 'update']);
+        Route::delete('inventory-valuations/{id}', [InventoryValuationController::class, 'destroy']);
+
+        Route::post('cost-object-controlling', [CostObjectControllingController::class, 'store']);
+        Route::get('cost-object-controlling/{id}', [CostObjectControllingController::class, 'show']);
+        Route::put('cost-object-controlling/{id}', [CostObjectControllingController::class, 'update']);
+        Route::delete('cost-object-controlling/{id}', [CostObjectControllingController::class, 'destroy']);
     });
 });
