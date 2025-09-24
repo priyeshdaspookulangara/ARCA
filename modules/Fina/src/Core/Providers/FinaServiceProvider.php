@@ -13,6 +13,15 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
+use Modules\Fina\PC\Domain\Repositories\MaterialCostRepositoryInterface;
+use Modules\Fina\PC\Infrastructure\Persistence\EloquentMaterialCostRepository;
+use Modules\Fina\PC\Domain\Repositories\InventoryValuationRepositoryInterface;
+use Modules\Fina\PC\Infrastructure\Persistence\EloquentInventoryValuationRepository;
+use Modules\Fina\PC\Domain\Repositories\CostObjectControllingRepositoryInterface;
+use Modules\Fina\PC\Infrastructure\Persistence\EloquentCostObjectControllingRepository;
+use Modules\Fina\PC\Application\MaterialCostService;
+use Modules\Fina\PC\Application\InventoryValuationService;
+use Modules\Fina\PC\Application\CostObjectControllingService;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -61,6 +70,22 @@ class FinaServiceProvider extends ServiceProvider
 
         $this->app->singleton(BankStatementService::class, function ($app) {
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
+        });
+
+        $this->app->bind(MaterialCostRepositoryInterface::class, EloquentMaterialCostRepository::class);
+        $this->app->bind(InventoryValuationRepositoryInterface::class, EloquentInventoryValuationRepository::class);
+        $this->app->bind(CostObjectControllingRepositoryInterface::class, EloquentCostObjectControllingRepository::class);
+
+        $this->app->singleton(MaterialCostService::class, function ($app) {
+            return new MaterialCostService($app->make(MaterialCostRepositoryInterface::class));
+        });
+
+        $this->app->singleton(InventoryValuationService::class, function ($app) {
+            return new InventoryValuationService($app->make(InventoryValuationRepositoryInterface::class));
+        });
+
+        $this->app->singleton(CostObjectControllingService::class, function ($app) {
+            return new CostObjectControllingService($app->make(CostObjectControllingRepositoryInterface::class));
         });
     }
 
