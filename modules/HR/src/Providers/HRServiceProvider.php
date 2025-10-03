@@ -38,8 +38,10 @@ class HRServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // $this->app->register(RouteServiceProvider::class);
-        // Register other services, repositories, etc.
+        $this->app->singleton(
+            \Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface::class,
+            \Modules\HR\PersonnelAdmin\Infrastructure\Persistence\EmployeeRepository::class
+        );
     }
 
     /**
