@@ -15,6 +15,7 @@ class FinaServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // PA Bindings
         $this->app->bind(
             MarketSegmentRepository::class,
             MarketSegmentRepositoryImpl::class
