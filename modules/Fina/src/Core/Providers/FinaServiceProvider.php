@@ -13,6 +13,10 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
+use Modules\Fina\CO\PCA\Domain\Repositories\PcaPostingRepository;
+use Modules\Fina\CO\PCA\Domain\Repositories\ProfitCenterRepository;
+use Modules\Fina\CO\PCA\Infrastructure\PcaPostingRepositoryImpl;
+use Modules\Fina\CO\PCA\Infrastructure\ProfitCenterRepositoryImpl;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -62,6 +66,17 @@ class FinaServiceProvider extends ServiceProvider
         $this->app->singleton(BankStatementService::class, function ($app) {
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
+
+        // PCA Bindings
+        $this->app->bind(
+            ProfitCenterRepository::class,
+            ProfitCenterRepositoryImpl::class
+        );
+
+        $this->app->bind(
+            PcaPostingRepository::class,
+            PcaPostingRepositoryImpl::class
+        );
     }
 
     /**
