@@ -5,14 +5,18 @@ namespace Modules\HR\PersonnelAdmin\Application\UseCases\PersonalDataUpdate;
 use Modules\HR\PersonnelAdmin\Domain\Entities\Employee;
 use Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface;
 use Modules\HR\PersonnelAdmin\Domain\Exceptions\EmployeeNotFoundException;
+use Modules\HR\PersonnelAdmin\Domain\Events\EmployeePersonalDataUpdatedEvent;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PersonalDataUpdateService
 {
     private $employeeRepository;
+    private $eventDispatcher;
 
-    public function __construct(EmployeeRepositoryInterface $employeeRepository)
+    public function __construct(EmployeeRepositoryInterface $employeeRepository, Dispatcher $eventDispatcher)
     {
         $this->employeeRepository = $employeeRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function updatePersonalData(string $employeeId, array $data): Employee
@@ -23,27 +27,30 @@ class PersonalDataUpdateService
             throw new EmployeeNotFoundException($employeeId);
         }
 
-        if (isset($data['address'])) {
-            $employee->setAddress($data['address']);
+        $setters = [
+            'address' => 'setAddress',
+            'marital_status' => 'setMaritalStatus',
+            'last_name' => 'setLastName',
+            'emergency_contact' => 'setEmergencyContact',
+            'bank_details' => 'setBankDetails',
+        ];
+
+        $updated = false;
+        foreach ($setters as $key => $setter) {
+            if (isset($data[$key])) {
+                $value = $data[$key];
+                if ($key === 'bank_details' && is_array($value)) {
+                    $value = json_encode($value);
+                }
+                $employee->{$setter}($value);
+                $updated = true;
+            }
         }
 
-        if (isset($data['marital_status'])) {
-            $employee->setMaritalStatus($data['marital_status']);
+        if ($updated) {
+            $this->employeeRepository->save($employee);
+            $this->eventDispatcher->dispatch(new EmployeePersonalDataUpdatedEvent($employee->getId(), $data));
         }
-
-        if (isset($data['last_name'])) {
-            $employee->setLastName($data['last_name']);
-        }
-
-        if (isset($data['emergency_contact'])) {
-            $employee->setEmergencyContact($data['emergency_contact']);
-        }
-
-        if (isset($data['bank_details'])) {
-            $employee->setBankDetails($data['bank_details']);
-        }
-
-        $this->employeeRepository->save($employee);
 
         return $employee;
     }
