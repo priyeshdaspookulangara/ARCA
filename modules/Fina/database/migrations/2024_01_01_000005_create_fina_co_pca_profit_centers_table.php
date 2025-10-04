@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('fina_co_pa_market_segments', function (Blueprint $table) {
+        Schema::create('fina_co_pca_profit_centers', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
+            $table->unsignedBigInteger('controlling_area_id');
+            $table->string('responsible_person')->nullable();
             $table->timestamps();
+
+            $table->foreign('controlling_area_id')->references('id')->on('fina_co_controlling_areas');
         });
     }
 
@@ -24,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('fina_co_pa_market_segments');
+        Schema::dropIfExists('fina_co_pca_profit_centers');
     }
 };
