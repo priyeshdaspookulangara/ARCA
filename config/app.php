@@ -173,7 +173,7 @@ return [
         Modules\MDG\Core\Providers\MdgServiceProvider::class,
         Modules\PLM\Core\Providers\PlmServiceProvider::class,
         Modules\GRC\Core\Providers\GrcServiceProvider::class,
-        Modules\Fina\Core\Providers\FinaServiceProvider::class,
+        Modules\Fina\Providers\FinaServiceProvider::class,
         Modules\EWM\Core\Providers\EwmServiceProvider::class,
         Modules\LSCM\Core\Providers\LscmServiceProvider::class,
         Modules\HR\Providers\HRServiceProvider::class,
