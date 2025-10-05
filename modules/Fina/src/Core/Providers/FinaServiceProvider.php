@@ -13,10 +13,14 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\CO\PCA\Domain\Repositories\PcaPostingRepository;
-use Modules\Fina\CO\PCA\Domain\Repositories\ProfitCenterRepository;
-use Modules\Fina\CO\PCA\Infrastructure\PcaPostingRepositoryImpl;
-use Modules\Fina\CO\PCA\Infrastructure\ProfitCenterRepositoryImpl;
+use Modules\Fina\CO\PC\Domain\Repositories\ActivityTypeRepository;
+use Modules\Fina\CO\PC\Domain\Repositories\CostElementRepository;
+use Modules\Fina\CO\PC\Domain\Repositories\ProductCostHeaderRepository;
+use Modules\Fina\CO\PC\Domain\Repositories\ProductCostItemRepository;
+use Modules\Fina\CO\PC\Infrastructure\ActivityTypeRepositoryImpl;
+use Modules\Fina\CO\PC\Infrastructure\CostElementRepositoryImpl;
+use Modules\Fina\CO\PC\Infrastructure\ProductCostHeaderRepositoryImpl;
+use Modules\Fina\CO\PC\Infrastructure\ProductCostItemRepositoryImpl;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -67,15 +71,25 @@ class FinaServiceProvider extends ServiceProvider
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
 
-        // PCA Bindings
+        // PC Bindings
         $this->app->bind(
-            ProfitCenterRepository::class,
-            ProfitCenterRepositoryImpl::class
+            CostElementRepository::class,
+            CostElementRepositoryImpl::class
         );
 
         $this->app->bind(
-            PcaPostingRepository::class,
-            PcaPostingRepositoryImpl::class
+            ActivityTypeRepository::class,
+            ActivityTypeRepositoryImpl::class
+        );
+
+        $this->app->bind(
+            ProductCostHeaderRepository::class,
+            ProductCostHeaderRepositoryImpl::class
+        );
+
+        $this->app->bind(
+            ProductCostItemRepository::class,
+            ProductCostItemRepositoryImpl::class
         );
     }
 
