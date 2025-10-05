@@ -13,14 +13,15 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\CO\PC\Domain\Repositories\ActivityTypeRepository;
-use Modules\Fina\CO\PC\Domain\Repositories\CostElementRepository;
-use Modules\Fina\CO\PC\Domain\Repositories\ProductCostHeaderRepository;
-use Modules\Fina\CO\PC\Domain\Repositories\ProductCostItemRepository;
-use Modules\Fina\CO\PC\Infrastructure\ActivityTypeRepositoryImpl;
-use Modules\Fina\CO\PC\Infrastructure\CostElementRepositoryImpl;
-use Modules\Fina\CO\PC\Infrastructure\ProductCostHeaderRepositoryImpl;
-use Modules\Fina\CO\PC\Infrastructure\ProductCostItemRepositoryImpl;
+use Modules\Fina\TR\Domain\Repositories\CashPositionRepository;
+use Modules\Fina\TR\Domain\Repositories\BankBalanceRepository;
+use Modules\Fina\TR\Domain\Repositories\LiquidityForecastRepository;
+use Modules\Fina\TR\Infrastructure\CashPositionRepositoryImpl;
+use Modules\Fina\TR\Infrastructure\BankBalanceRepositoryImpl;
+use Modules\Fina\TR\Infrastructure\LiquidityForecastRepositoryImpl;
+use Modules\Fina\TR\Domain\CashPositionService;
+use Modules\Fina\TR\Domain\BankBalanceService;
+use Modules\Fina\TR\Domain\LiquidityForecastService;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -71,26 +72,34 @@ class FinaServiceProvider extends ServiceProvider
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
 
-        // PC Bindings
+        // TR Repository Bindings
         $this->app->bind(
-            CostElementRepository::class,
-            CostElementRepositoryImpl::class
+            CashPositionRepository::class,
+            CashPositionRepositoryImpl::class
         );
 
         $this->app->bind(
-            ActivityTypeRepository::class,
-            ActivityTypeRepositoryImpl::class
+            BankBalanceRepository::class,
+            BankBalanceRepositoryImpl::class
         );
 
         $this->app->bind(
-            ProductCostHeaderRepository::class,
-            ProductCostHeaderRepositoryImpl::class
+            LiquidityForecastRepository::class,
+            LiquidityForecastRepositoryImpl::class
         );
 
-        $this->app->bind(
-            ProductCostItemRepository::class,
-            ProductCostItemRepositoryImpl::class
-        );
+        // TR Service Bindings
+        $this->app->singleton(CashPositionService::class, function ($app) {
+            return new CashPositionService($app->make(CashPositionRepository::class));
+        });
+
+        $this->app->singleton(BankBalanceService::class, function ($app) {
+            return new BankBalanceService($app->make(BankBalanceRepository::class));
+        });
+
+        $this->app->singleton(LiquidityForecastService::class, function ($app) {
+            return new LiquidityForecastService($app->make(LiquidityForecastRepository::class));
+        });
     }
 
     /**

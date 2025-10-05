@@ -6,9 +6,9 @@ use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
-use Modules\Fina\CO\PC\Infrastructure\Http\Controllers\ActivityTypeController;
-use Modules\Fina\CO\PC\Infrastructure\Http\Controllers\CostElementController;
-use Modules\Fina\CO\PC\Infrastructure\Http\Controllers\ProductCostingController;
+use Modules\Fina\TR\Infrastructure\Http\Controllers\CashPositionController;
+use Modules\Fina\TR\Infrastructure\Http\Controllers\BankBalanceController;
+use Modules\Fina\TR\Infrastructure\Http\Controllers\LiquidityForecastController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
 
 Route::prefix('fina')->group(function () {
@@ -49,11 +49,9 @@ Route::prefix('fina')->group(function () {
         Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
     });
 
-    Route::prefix('co')->group(function () {
-        Route::prefix('pc')->group(function () {
-            Route::apiResource('cost-elements', CostElementController::class);
-            Route::apiResource('activity-types', ActivityTypeController::class);
-            Route::apiResource('product-cost-estimates', ProductCostingController::class)->except(['update']);
-        });
+    Route::prefix('tr')->group(function () {
+        Route::apiResource('cash-positions', CashPositionController::class);
+        Route::apiResource('bank-balances', BankBalanceController::class);
+        Route::apiResource('liquidity-forecasts', LiquidityForecastController::class);
     });
 });
