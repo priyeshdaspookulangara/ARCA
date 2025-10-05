@@ -20,8 +20,13 @@ use Modules\Fina\FI\AP\Infrastructure\Ledger\FinaPayrollLedger;
 use Illuminate\Support\Facades\Event;
 use Modules\HR\PersonnelAdmin\Domain\Events\EmployeeSalaryUpdatedEvent;
 use Modules\HR\PersonnelAdmin\Domain\Events\EmployeePersonalDataUpdatedEvent;
+use Modules\HR\PersonnelAdmin\Domain\Events\WorkScheduleChangedEvent;
+use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveStartedEvent;
+use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveEndedEvent;
 use Modules\Fina\Listeners\UpdateEmployeeSalaryInFinaListener;
 use Modules\Fina\Listeners\UpdateEmployeePersonalDataInFinaListener;
+use Modules\Fina\Listeners\UpdateWorkScheduleInFinaListener;
+use Modules\Fina\Listeners\UpdateLeaveStatusInFinaListener;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -56,6 +61,21 @@ class FinaServiceProvider extends ServiceProvider
         Event::listen(
             EmployeePersonalDataUpdatedEvent::class,
             UpdateEmployeePersonalDataInFinaListener::class
+        );
+
+        Event::listen(
+            WorkScheduleChangedEvent::class,
+            UpdateWorkScheduleInFinaListener::class
+        );
+
+        Event::listen(
+            LongTermLeaveStartedEvent::class,
+            UpdateLeaveStatusInFinaListener::class
+        );
+
+        Event::listen(
+            LongTermLeaveEndedEvent::class,
+            UpdateLeaveStatusInFinaListener::class
         );
     }
 

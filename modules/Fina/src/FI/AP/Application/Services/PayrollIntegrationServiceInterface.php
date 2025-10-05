@@ -20,5 +20,32 @@ interface PayrollIntegrationServiceInterface
      * @param array $bankDetails
      * @return void
      */
-    public function updateEmployeeBankDetails(string $employeeId, array $bankDetails): void;
+    public function updateEmployeeBankDetails(string $employeeId, string $bankDetails): void;
+
+    /**
+     * Updates the work schedule for a given employee in the financial system.
+     *
+     * @param string $employeeId
+     * @param string $workSchedule
+     * @return void
+     */
+    public function updateEmployeeWorkSchedule(string $employeeId, string $workSchedule): void;
+
+    /**
+     * Updates the employment type for a given employee in the financial system.
+     *
+     * @param string $employeeId
+     * @param string $employmentType
+     * @return void
+     */
+    public function updateEmployeeEmploymentType(string $employeeId, string $employmentType): void;
+
+    /**
+     * Updates the leave status for a given employee in the financial system.
+     *
+     * @param string $employeeId
+     * @param bool $onLeave
+     * @return void
+     */
+    public function updateEmployeeLeaveStatus(string $employeeId, bool $onLeave): void;
 }

@@ -11,8 +11,8 @@ class FinaPayrollLedger implements FinaPayrollLedgerInterface
     public function __construct()
     {
         // Pre-seed with initial data to simulate an existing financial record.
-        $this->records['123'] = ['salary' => 50000, 'bank_details' => '{"account":"111","bank":"Bank A"}'];
-        $this->records['456'] = ['salary' => 75000, 'bank_details' => '{"account":"222","bank":"Bank B"}'];
+        $this->records['123'] = ['salary' => 50000, 'bank_details' => '{"account":"111","bank":"Bank A"}', 'work_schedule' => 'Full-Time', 'employment_type' => 'Permanent', 'on_leave' => false];
+        $this->records['456'] = ['salary' => 75000, 'bank_details' => '{"account":"222","bank":"Bank B"}', 'work_schedule' => 'Full-Time', 'employment_type' => 'Permanent', 'on_leave' => false];
     }
 
     public function updateEmployeeSalary(string $employeeId, float $newSalary): void
@@ -34,5 +34,29 @@ class FinaPayrollLedger implements FinaPayrollLedgerInterface
     public function getEmployeeRecord(string $employeeId): ?array
     {
         return $this->records[$employeeId] ?? null;
+    }
+
+    public function updateEmployeeWorkSchedule(string $employeeId, string $workSchedule): void
+    {
+        if (!isset($this->records[$employeeId])) {
+            $this->records[$employeeId] = [];
+        }
+        $this->records[$employeeId]['work_schedule'] = $workSchedule;
+    }
+
+    public function updateEmployeeEmploymentType(string $employeeId, string $employmentType): void
+    {
+        if (!isset($this->records[$employeeId])) {
+            $this->records[$employeeId] = [];
+        }
+        $this->records[$employeeId]['employment_type'] = $employmentType;
+    }
+
+    public function updateEmployeeLeaveStatus(string $employeeId, bool $onLeave): void
+    {
+        if (!isset($this->records[$employeeId])) {
+            $this->records[$employeeId] = [];
+        }
+        $this->records[$employeeId]['on_leave'] = $onLeave;
     }
 }

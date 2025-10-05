@@ -11,6 +11,10 @@ class Employee implements \JsonSerializable
     private $lastName;
     private $emergencyContact;
     private $bankDetails;
+    private $workSchedule;
+    private $employmentType;
+    private $onLeave = false;
+    private $leaveType;
 
     public function __construct(string $id)
     {
@@ -82,6 +86,46 @@ class Employee implements \JsonSerializable
         $this->bankDetails = $bankDetails;
     }
 
+    public function getWorkSchedule(): ?string
+    {
+        return $this->workSchedule;
+    }
+
+    public function setWorkSchedule(string $workSchedule): void
+    {
+        $this->workSchedule = $workSchedule;
+    }
+
+    public function getEmploymentType(): ?string
+    {
+        return $this->employmentType;
+    }
+
+    public function setEmploymentType(string $employmentType): void
+    {
+        $this->employmentType = $employmentType;
+    }
+
+    public function isOnLeave(): bool
+    {
+        return $this->onLeave;
+    }
+
+    public function setOnLeave(bool $onLeave): void
+    {
+        $this->onLeave = $onLeave;
+    }
+
+    public function getLeaveType(): ?string
+    {
+        return $this->leaveType;
+    }
+
+    public function setLeaveType(?string $leaveType): void
+    {
+        $this->leaveType = $leaveType;
+    }
+
     public function toArray(): array
     {
         return [
@@ -92,6 +136,10 @@ class Employee implements \JsonSerializable
             'last_name' => $this->lastName,
             'emergency_contact' => $this->emergencyContact,
             'bank_details' => $this->bankDetails,
+            'work_schedule' => $this->workSchedule,
+            'employment_type' => $this->employmentType,
+            'on_leave' => $this->onLeave,
+            'leave_type' => $this->leaveType,
         ];
     }
 

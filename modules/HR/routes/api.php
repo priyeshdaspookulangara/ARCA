@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use Modules\HR\PersonnelAdmin\Application\UseCases\SalaryChange\SalaryChangeService;
 use Modules\HR\PersonnelAdmin\Application\UseCases\PersonalDataUpdate\PersonalDataUpdateService;
 use Modules\HR\PersonnelAdmin\Domain\Exceptions\EmployeeNotFoundException;
+use Modules\HR\PersonnelAdmin\Application\UseCases\WorkScheduleChange\WorkScheduleChangeService;
+use Modules\HR\PersonnelAdmin\Application\UseCases\LongTermLeave\LongTermLeaveService;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +28,51 @@ Route::post('/employees/{employeeId}/salary', function (Request $request, string
 
     try {
         $employee = $salaryChangeService->changeSalary($employeeId, (float)$newSalary);
+        return response()->json($employee);
+    } catch (EmployeeNotFoundException $e) {
+        return response()->json(['error' => $e->getMessage()], 404);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'An unexpected error occurred.'], 500);
+    }
+});
+
+Route::post('/employees/{employeeId}/leave/start', function (Request $request, string $employeeId, LongTermLeaveService $longTermLeaveService) {
+    $leaveType = $request->input('leave_type');
+
+    if (!$leaveType) {
+        return response()->json(['error' => 'Leave type is required'], 400);
+    }
+
+    try {
+        $employee = $longTermLeaveService->startLeave($employeeId, $leaveType);
+        return response()->json($employee);
+    } catch (EmployeeNotFoundException $e) {
+        return response()->json(['error' => $e->getMessage()], 404);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'An unexpected error occurred.'], 500);
+    }
+});
+
+Route::post('/employees/{employeeId}/leave/end', function (Request $request, string $employeeId, LongTermLeaveService $longTermLeaveService) {
+    try {
+        $employee = $longTermLeaveService->endLeave($employeeId);
+        return response()->json($employee);
+    } catch (EmployeeNotFoundException $e) {
+        return response()->json(['error' => $e->getMessage()], 404);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'An unexpected error occurred.'], 500);
+    }
+});
+
+Route::put('/employees/{employeeId}/work-schedule', function (Request $request, string $employeeId, WorkScheduleChangeService $workScheduleChangeService) {
+    $data = $request->only(['work_schedule', 'employment_type']);
+
+    if (empty($data)) {
+        return response()->json(['error' => 'No data provided for update'], 400);
+    }
+
+    try {
+        $employee = $workScheduleChangeService->changeWorkSchedule($employeeId, $data);
         return response()->json($employee);
     } catch (EmployeeNotFoundException $e) {
         return response()->json(['error' => $e->getMessage()], 404);

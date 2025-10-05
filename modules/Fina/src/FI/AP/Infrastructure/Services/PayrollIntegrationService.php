@@ -37,4 +37,19 @@ class PayrollIntegrationService implements PayrollIntegrationServiceInterface
     {
         $this->payrollLedger->updateEmployeeBankDetails($employeeId, $bankDetails);
     }
+
+    public function updateEmployeeWorkSchedule(string $employeeId, string $workSchedule): void
+    {
+        $this->payrollLedger->updateEmployeeWorkSchedule($employeeId, $workSchedule);
+    }
+
+    public function updateEmployeeEmploymentType(string $employeeId, string $employmentType): void
+    {
+        $this->payrollLedger->updateEmployeeEmploymentType($employeeId, $employmentType);
+    }
+
+    public function updateEmployeeLeaveStatus(string $employeeId, bool $onLeave): void
+    {
+        $this->payrollLedger->updateEmployeeLeaveStatus($employeeId, $onLeave);
+    }
 }
