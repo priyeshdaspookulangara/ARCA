@@ -4,6 +4,22 @@ namespace Modules\HR\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface;
+use Modules\HR\PersonnelAdmin\Infrastructure\Persistence\EmployeeRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\OrganizationalUnitRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryOrganizationalUnitRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\JobRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryJobRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\PositionRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryPositionRepository;
+use Modules\HR\TimeManagement\Domain\Repositories\TimeRecordRepositoryInterface;
+use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryTimeRecordRepository;
+use Modules\HR\TimeManagement\Domain\Repositories\AbsenceRepositoryInterface;
+use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryAbsenceRepository;
+use Modules\HR\Payroll\Domain\Repositories\PayrollRunRepositoryInterface;
+use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPayrollRunRepository;
+use Modules\HR\Payroll\Domain\Repositories\PaycheckRepositoryInterface;
+use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPaycheckRepository;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -38,8 +54,44 @@ class HRServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        // $this->app->register(RouteServiceProvider::class);
-        // Register other services, repositories, etc.
+        $this->app->singleton(
+            EmployeeRepositoryInterface::class,
+            EmployeeRepository::class
+        );
+
+        // OM Repositories
+        $this->app->singleton(
+            OrganizationalUnitRepositoryInterface::class,
+            InMemoryOrganizationalUnitRepository::class
+        );
+        $this->app->singleton(
+            JobRepositoryInterface::class,
+            InMemoryJobRepository::class
+        );
+        $this->app->singleton(
+            PositionRepositoryInterface::class,
+            InMemoryPositionRepository::class
+        );
+
+        // Time Management Repositories
+        $this->app->singleton(
+            TimeRecordRepositoryInterface::class,
+            InMemoryTimeRecordRepository::class
+        );
+        $this->app->singleton(
+            AbsenceRepositoryInterface::class,
+            InMemoryAbsenceRepository::class
+        );
+
+        // Payroll Repositories
+        $this->app->singleton(
+            PayrollRunRepositoryInterface::class,
+            InMemoryPayrollRunRepository::class
+        );
+        $this->app->singleton(
+            PaycheckRepositoryInterface::class,
+            InMemoryPaycheckRepository::class
+        );
     }
 
     /**
