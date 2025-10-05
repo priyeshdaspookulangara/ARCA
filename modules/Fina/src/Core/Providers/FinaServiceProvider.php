@@ -13,15 +13,13 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\TR\Domain\Repositories\CashPositionRepository;
-use Modules\Fina\TR\Domain\Repositories\BankBalanceRepository;
-use Modules\Fina\TR\Domain\Repositories\LiquidityForecastRepository;
-use Modules\Fina\TR\Infrastructure\CashPositionRepositoryImpl;
-use Modules\Fina\TR\Infrastructure\BankBalanceRepositoryImpl;
-use Modules\Fina\TR\Infrastructure\LiquidityForecastRepositoryImpl;
-use Modules\Fina\TR\Domain\CashPositionService;
-use Modules\Fina\TR\Domain\BankBalanceService;
-use Modules\Fina\TR\Domain\LiquidityForecastService;
+use Modules\Fina\FI\AP\Domain\Repositories\APInvoiceRepositoryInterface;
+use Modules\Fina\FI\AP\Infrastructure\Persistence\EloquentAPInvoiceRepository;
+use Modules\Fina\FI\AP\Domain\Repositories\PaymentRunRepository;
+use Modules\Fina\FI\AP\Infrastructure\Persistence\PaymentRunRepositoryImpl;
+use Modules\Fina\FI\AP\Domain\Repositories\PaymentProposalRepository;
+use Modules\Fina\FI\AP\Infrastructure\Persistence\PaymentProposalRepositoryImpl;
+use Modules\Fina\FI\AP\Application\AutomaticPaymentService;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -72,33 +70,25 @@ class FinaServiceProvider extends ServiceProvider
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
 
-        // TR Repository Bindings
+        // AP Payment Program Bindings
         $this->app->bind(
-            CashPositionRepository::class,
-            CashPositionRepositoryImpl::class
+            APInvoiceRepositoryInterface::class,
+            EloquentAPInvoiceRepository::class
         );
-
         $this->app->bind(
-            BankBalanceRepository::class,
-            BankBalanceRepositoryImpl::class
+            PaymentRunRepository::class,
+            PaymentRunRepositoryImpl::class
         );
-
         $this->app->bind(
-            LiquidityForecastRepository::class,
-            LiquidityForecastRepositoryImpl::class
+            PaymentProposalRepository::class,
+            PaymentProposalRepositoryImpl::class
         );
-
-        // TR Service Bindings
-        $this->app->singleton(CashPositionService::class, function ($app) {
-            return new CashPositionService($app->make(CashPositionRepository::class));
-        });
-
-        $this->app->singleton(BankBalanceService::class, function ($app) {
-            return new BankBalanceService($app->make(BankBalanceRepository::class));
-        });
-
-        $this->app->singleton(LiquidityForecastService::class, function ($app) {
-            return new LiquidityForecastService($app->make(LiquidityForecastRepository::class));
+        $this->app->singleton(AutomaticPaymentService::class, function ($app) {
+            return new AutomaticPaymentService(
+                $app->make(APInvoiceRepositoryInterface::class),
+                $app->make(PaymentRunRepository::class),
+                $app->make(PaymentProposalRepository::class)
+            );
         });
     }
 

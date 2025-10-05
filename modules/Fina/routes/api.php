@@ -2,13 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
+use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
+use Modules\Fina\FI\AP\Http\Controllers\AutomaticPaymentController;
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
-use Modules\Fina\TR\Infrastructure\Http\Controllers\CashPositionController;
-use Modules\Fina\TR\Infrastructure\Http\Controllers\BankBalanceController;
-use Modules\Fina\TR\Infrastructure\Http\Controllers\LiquidityForecastController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
 
 Route::prefix('fina')->group(function () {
@@ -20,6 +19,8 @@ Route::prefix('fina')->group(function () {
     Route::prefix('ap')->group(function () {
         Route::post('invoices', [APInvoiceController::class, 'store']);
         Route::get('invoices/{id}', [APInvoiceController::class, 'show']);
+
+        Route::apiResource('payment-runs', AutomaticPaymentController::class)->except(['index']);
     });
 
     Route::prefix('ar')->group(function () {
@@ -49,9 +50,4 @@ Route::prefix('fina')->group(function () {
         Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
     });
 
-    Route::prefix('tr')->group(function () {
-        Route::apiResource('cash-positions', CashPositionController::class);
-        Route::apiResource('bank-balances', BankBalanceController::class);
-        Route::apiResource('liquidity-forecasts', LiquidityForecastController::class);
-    });
 });
