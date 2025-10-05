@@ -4,6 +4,14 @@ namespace Modules\HR\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface;
+use Modules\HR\PersonnelAdmin\Infrastructure\Persistence\EmployeeRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\OrganizationalUnitRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryOrganizationalUnitRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\JobRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryJobRepository;
+use Modules\HR\OrganizationalManagement\Domain\Repositories\PositionRepositoryInterface;
+use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryPositionRepository;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -39,8 +47,22 @@ class HRServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(
-            \Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface::class,
-            \Modules\HR\PersonnelAdmin\Infrastructure\Persistence\EmployeeRepository::class
+            EmployeeRepositoryInterface::class,
+            EmployeeRepository::class
+        );
+
+        // OM Repositories
+        $this->app->singleton(
+            OrganizationalUnitRepositoryInterface::class,
+            InMemoryOrganizationalUnitRepository::class
+        );
+        $this->app->singleton(
+            JobRepositoryInterface::class,
+            InMemoryJobRepository::class
+        );
+        $this->app->singleton(
+            PositionRepositoryInterface::class,
+            InMemoryPositionRepository::class
         );
     }
 
