@@ -24,11 +24,13 @@ use Modules\HR\PersonnelAdmin\Domain\Events\WorkScheduleChangedEvent;
 use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveStartedEvent;
 use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveEndedEvent;
 use Modules\HR\TimeManagement\Domain\Events\TimeRecordApprovedEvent;
+use Modules\HR\Payroll\Domain\Events\PayrollRunCompletedEvent;
 use Modules\Fina\Listeners\UpdateEmployeeSalaryInFinaListener;
 use Modules\Fina\Listeners\UpdateEmployeePersonalDataInFinaListener;
 use Modules\Fina\Listeners\UpdateWorkScheduleInFinaListener;
 use Modules\Fina\Listeners\UpdateLeaveStatusInFinaListener;
 use Modules\Fina\Listeners\ProcessApprovedTimeRecordListener;
+use Modules\Fina\Listeners\PostPayrollResultsListener;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -83,6 +85,11 @@ class FinaServiceProvider extends ServiceProvider
         Event::listen(
             TimeRecordApprovedEvent::class,
             ProcessApprovedTimeRecordListener::class
+        );
+
+        Event::listen(
+            PayrollRunCompletedEvent::class,
+            PostPayrollResultsListener::class
         );
     }
 

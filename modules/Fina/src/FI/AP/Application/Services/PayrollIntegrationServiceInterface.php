@@ -57,4 +57,12 @@ interface PayrollIntegrationServiceInterface
      * @return void
      */
     public function addApprovedWorkedHours(string $employeeId, float $hours): void;
+
+    /**
+     * Posts the results of a completed payroll run to the financial system.
+     *
+     * @param array $payrollData
+     * @return void
+     */
+    public function postPayrollRunResults(array $payrollData): void;
 }

@@ -7,6 +7,7 @@ use Modules\Fina\FI\AP\Domain\Ledger\FinaPayrollLedgerInterface;
 class FinaPayrollLedger implements FinaPayrollLedgerInterface
 {
     private $records = [];
+    private $generalLedgerPostings = [];
 
     public function __construct()
     {
@@ -66,5 +67,15 @@ class FinaPayrollLedger implements FinaPayrollLedgerInterface
             $this->records[$employeeId] = ['worked_hours' => 0];
         }
         $this->records[$employeeId]['worked_hours'] += $hours;
+    }
+
+    public function postToGeneralLedger(array $postingData): void
+    {
+        $this->generalLedgerPostings[] = $postingData;
+    }
+
+    public function getGeneralLedgerPostings(): array
+    {
+        return $this->generalLedgerPostings;
     }
 }

@@ -16,6 +16,10 @@ use Modules\HR\TimeManagement\Domain\Repositories\TimeRecordRepositoryInterface;
 use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryTimeRecordRepository;
 use Modules\HR\TimeManagement\Domain\Repositories\AbsenceRepositoryInterface;
 use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryAbsenceRepository;
+use Modules\HR\Payroll\Domain\Repositories\PayrollRunRepositoryInterface;
+use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPayrollRunRepository;
+use Modules\HR\Payroll\Domain\Repositories\PaycheckRepositoryInterface;
+use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPaycheckRepository;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -77,6 +81,16 @@ class HRServiceProvider extends ServiceProvider
         $this->app->singleton(
             AbsenceRepositoryInterface::class,
             InMemoryAbsenceRepository::class
+        );
+
+        // Payroll Repositories
+        $this->app->singleton(
+            PayrollRunRepositoryInterface::class,
+            InMemoryPayrollRunRepository::class
+        );
+        $this->app->singleton(
+            PaycheckRepositoryInterface::class,
+            InMemoryPaycheckRepository::class
         );
     }
 

@@ -12,6 +12,7 @@ use Modules\HR\OrganizationalManagement\Application\Services\JobService;
 use Modules\HR\OrganizationalManagement\Application\Services\PositionService;
 use Modules\HR\TimeManagement\Application\Services\TimeRecordService;
 use Modules\HR\TimeManagement\Application\Services\AbsenceService;
+use Modules\HR\Payroll\Application\Services\PayrollService;
 
 /*
 |--------------------------------------------------------------------------
@@ -214,5 +215,33 @@ Route::prefix('time')->group(function () {
     Route::post('/absences/{id}/approve', function (string $id, AbsenceService $service) {
         $absence = $service->approveAbsence($id);
         return $absence ? response()->json($absence) : response()->json(['error' => 'Absence not found'], 404);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Payroll API Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('payroll')->group(function () {
+    Route::post('/run', function (Request $request, PayrollService $service) {
+        $startDate = $request->input('period_start_date');
+        $endDate = $request->input('period_end_date');
+        if (!$startDate || !$endDate) {
+            return response()->json(['error' => 'Period start and end dates are required'], 400);
+        }
+        $payrollRun = $service->executePayrollRun($startDate, $endDate);
+        return response()->json($payrollRun, 201);
+    });
+
+    Route::get('/run/{id}', function (string $id, PayrollService $service) {
+        $payrollRun = $service->getPayrollRunDetails($id);
+        return $payrollRun ? response()->json($payrollRun) : response()->json(['error' => 'Payroll run not found'], 404);
+    });
+
+    Route::get('/run/{id}/paychecks', function (string $id, PayrollService $service) {
+        $paychecks = $service->getPaychecksForPayrollRun($id);
+        return response()->json($paychecks);
     });
 });

@@ -59,6 +59,21 @@ interface FinaPayrollLedgerInterface
     public function addWorkedHours(string $employeeId, float $hours): void;
 
     /**
+     * Posts a summary of a payroll run to the general ledger.
+     *
+     * @param array $postingData
+     * @return void
+     */
+    public function postToGeneralLedger(array $postingData): void;
+
+    /**
+     * Retrieves all general ledger postings.
+     *
+     * @return array
+     */
+    public function getGeneralLedgerPostings(): array;
+
+    /**
      * Retrieves the record for a given employee from the ledger.
      *
      * @param string $employeeId

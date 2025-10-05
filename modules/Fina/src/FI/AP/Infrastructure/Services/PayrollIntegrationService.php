@@ -57,4 +57,9 @@ class PayrollIntegrationService implements PayrollIntegrationServiceInterface
     {
         $this->payrollLedger->addWorkedHours($employeeId, $hours);
     }
+
+    public function postPayrollRunResults(array $payrollData): void
+    {
+        $this->payrollLedger->postToGeneralLedger($payrollData);
+    }
 }
