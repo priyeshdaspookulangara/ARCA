@@ -10,6 +10,8 @@ use Modules\HR\PersonnelAdmin\Application\UseCases\LongTermLeave\LongTermLeaveSe
 use Modules\HR\OrganizationalManagement\Application\Services\OrganizationalUnitService;
 use Modules\HR\OrganizationalManagement\Application\Services\JobService;
 use Modules\HR\OrganizationalManagement\Application\Services\PositionService;
+use Modules\HR\TimeManagement\Application\Services\TimeRecordService;
+use Modules\HR\TimeManagement\Application\Services\AbsenceService;
 
 /*
 |--------------------------------------------------------------------------
@@ -167,5 +169,50 @@ Route::prefix('om')->group(function () {
     Route::delete('/positions/{id}', function (string $id, PositionService $service) {
         $service->deletePosition($id);
         return response()->json(null, 204);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Time Management API Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('time')->group(function () {
+    // Time Records
+    Route::get('/employees/{employeeId}/time-records', function (string $employeeId, TimeRecordService $service) {
+        return response()->json($service->getTimeRecordsForEmployee($employeeId));
+    });
+    Route::post('/time-records', function (Request $request, TimeRecordService $service) {
+        $employeeId = $request->input('employee_id');
+        $date = $request->input('date');
+        $hours = $request->input('hours');
+        if (!$employeeId || !$date || !$hours) {
+            return response()->json(['error' => 'Employee ID, date, and hours are required'], 400);
+        }
+        return response()->json($service->recordTime($employeeId, $date, (float)$hours), 201);
+    });
+    Route::post('/time-records/{id}/approve', function (string $id, TimeRecordService $service) {
+        $record = $service->approveTimeRecord($id);
+        return $record ? response()->json($record) : response()->json(['error' => 'Time record not found'], 404);
+    });
+
+    // Absences
+    Route::get('/employees/{employeeId}/absences', function (string $employeeId, AbsenceService $service) {
+        return response()->json($service->getAbsencesForEmployee($employeeId));
+    });
+    Route::post('/absences', function (Request $request, AbsenceService $service) {
+        $employeeId = $request->input('employee_id');
+        $absenceType = $request->input('absence_type');
+        $startDate = $request->input('start_date');
+        $endDate = $request->input('end_date');
+        if (!$employeeId || !$absenceType || !$startDate || !$endDate) {
+            return response()->json(['error' => 'Employee ID, absence type, start date, and end date are required'], 400);
+        }
+        return response()->json($service->requestAbsence($employeeId, $absenceType, $startDate, $endDate), 201);
+    });
+    Route::post('/absences/{id}/approve', function (string $id, AbsenceService $service) {
+        $absence = $service->approveAbsence($id);
+        return $absence ? response()->json($absence) : response()->json(['error' => 'Absence not found'], 404);
     });
 });

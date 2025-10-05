@@ -50,6 +50,15 @@ interface FinaPayrollLedgerInterface
     public function updateEmployeeLeaveStatus(string $employeeId, bool $onLeave): void;
 
     /**
+     * Adds worked hours to an employee's record in the ledger.
+     *
+     * @param string $employeeId
+     * @param float $hours
+     * @return void
+     */
+    public function addWorkedHours(string $employeeId, float $hours): void;
+
+    /**
      * Retrieves the record for a given employee from the ledger.
      *
      * @param string $employeeId

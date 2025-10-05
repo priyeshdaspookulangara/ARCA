@@ -12,6 +12,10 @@ use Modules\HR\OrganizationalManagement\Domain\Repositories\JobRepositoryInterfa
 use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryJobRepository;
 use Modules\HR\OrganizationalManagement\Domain\Repositories\PositionRepositoryInterface;
 use Modules\HR\OrganizationalManagement\Infrastructure\Persistence\InMemoryPositionRepository;
+use Modules\HR\TimeManagement\Domain\Repositories\TimeRecordRepositoryInterface;
+use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryTimeRecordRepository;
+use Modules\HR\TimeManagement\Domain\Repositories\AbsenceRepositoryInterface;
+use Modules\HR\TimeManagement\Infrastructure\Persistence\InMemoryAbsenceRepository;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -63,6 +67,16 @@ class HRServiceProvider extends ServiceProvider
         $this->app->singleton(
             PositionRepositoryInterface::class,
             InMemoryPositionRepository::class
+        );
+
+        // Time Management Repositories
+        $this->app->singleton(
+            TimeRecordRepositoryInterface::class,
+            InMemoryTimeRecordRepository::class
+        );
+        $this->app->singleton(
+            AbsenceRepositoryInterface::class,
+            InMemoryAbsenceRepository::class
         );
     }
 

@@ -52,4 +52,9 @@ class PayrollIntegrationService implements PayrollIntegrationServiceInterface
     {
         $this->payrollLedger->updateEmployeeLeaveStatus($employeeId, $onLeave);
     }
+
+    public function addApprovedWorkedHours(string $employeeId, float $hours): void
+    {
+        $this->payrollLedger->addWorkedHours($employeeId, $hours);
+    }
 }

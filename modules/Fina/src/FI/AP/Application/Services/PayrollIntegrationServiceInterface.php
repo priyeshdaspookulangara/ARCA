@@ -48,4 +48,13 @@ interface PayrollIntegrationServiceInterface
      * @return void
      */
     public function updateEmployeeLeaveStatus(string $employeeId, bool $onLeave): void;
+
+    /**
+     * Adds approved worked hours to an employee's record for payroll calculation.
+     *
+     * @param string $employeeId
+     * @param float $hours
+     * @return void
+     */
+    public function addApprovedWorkedHours(string $employeeId, float $hours): void;
 }
