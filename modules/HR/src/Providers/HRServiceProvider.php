@@ -20,6 +20,15 @@ use Modules\HR\Payroll\Domain\Repositories\PayrollRunRepositoryInterface;
 use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPayrollRunRepository;
 use Modules\HR\Payroll\Domain\Repositories\PaycheckRepositoryInterface;
 use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPaycheckRepository;
+use Modules\HR\Recruitment\Domain\Repositories\JobOpeningRepositoryInterface;
+use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryJobOpeningRepository;
+use Modules\HR\Recruitment\Domain\Repositories\ApplicantRepositoryInterface;
+use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryApplicantRepository;
+use Modules\HR\Recruitment\Domain\Repositories\ApplicationRepositoryInterface;
+use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryApplicationRepository;
+use Illuminate\Support\Facades\Event;
+use Modules\HR\Recruitment\Domain\Events\ApplicantHiredEvent;
+use Modules\HR\PersonnelAdmin\Application\Listeners\CreateEmployeeFromHiredApplicantListener;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -45,6 +54,11 @@ class HRServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
         $this->loadRoutes();
+
+        Event::listen(
+            ApplicantHiredEvent::class,
+            CreateEmployeeFromHiredApplicantListener::class
+        );
     }
 
     /**
@@ -91,6 +105,20 @@ class HRServiceProvider extends ServiceProvider
         $this->app->singleton(
             PaycheckRepositoryInterface::class,
             InMemoryPaycheckRepository::class
+        );
+
+        // Recruitment Repositories
+        $this->app->singleton(
+            JobOpeningRepositoryInterface::class,
+            InMemoryJobOpeningRepository::class
+        );
+        $this->app->singleton(
+            ApplicantRepositoryInterface::class,
+            InMemoryApplicantRepository::class
+        );
+        $this->app->singleton(
+            ApplicationRepositoryInterface::class,
+            InMemoryApplicationRepository::class
         );
     }
 

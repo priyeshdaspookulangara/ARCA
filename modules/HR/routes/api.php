@@ -13,6 +13,7 @@ use Modules\HR\OrganizationalManagement\Application\Services\PositionService;
 use Modules\HR\TimeManagement\Application\Services\TimeRecordService;
 use Modules\HR\TimeManagement\Application\Services\AbsenceService;
 use Modules\HR\Payroll\Application\Services\PayrollService;
+use Modules\HR\Recruitment\Application\Services\RecruitmentService;
 
 /*
 |--------------------------------------------------------------------------
@@ -243,5 +244,45 @@ Route::prefix('payroll')->group(function () {
     Route::get('/run/{id}/paychecks', function (string $id, PayrollService $service) {
         $paychecks = $service->getPaychecksForPayrollRun($id);
         return response()->json($paychecks);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Recruitment API Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('recruitment')->group(function () {
+    // Job Openings
+    Route::get('/job-openings', function (RecruitmentService $service) {
+        return response()->json($service->getJobOpenings());
+    });
+    Route::post('/job-openings', function (Request $request, RecruitmentService $service) {
+        $positionId = $request->input('position_id');
+        if (!$positionId) {
+            return response()->json(['error' => 'Position ID is required'], 400);
+        }
+        return response()->json($service->createJobOpening($positionId), 201);
+    });
+
+    // Applications
+    Route::get('/job-openings/{id}/applications', function (string $id, RecruitmentService $service) {
+        return response()->json($service->getApplicationsForJobOpening($id));
+    });
+    Route::post('/job-openings/{id}/applications', function (Request $request, string $id, RecruitmentService $service) {
+        $applicantData = $request->only(['first_name', 'last_name', 'email', 'phone']);
+        if (empty($applicantData['first_name']) || empty($applicantData['last_name']) || empty($applicantData['email'])) {
+            return response()->json(['error' => 'First name, last name, and email are required'], 400);
+        }
+        return response()->json($service->submitApplication($id, $applicantData), 201);
+    });
+    Route::put('/applications/{id}', function (Request $request, string $id, RecruitmentService $service) {
+        $status = $request->input('status');
+        if (!$status) {
+            return response()->json(['error' => 'Status is required'], 400);
+        }
+        $application = $service->updateApplicationStatus($id, $status);
+        return $application ? response()->json($application) : response()->json(['error' => 'Application not found'], 404);
     });
 });
