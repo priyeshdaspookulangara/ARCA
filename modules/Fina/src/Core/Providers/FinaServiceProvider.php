@@ -13,13 +13,13 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\FI\AP\Domain\Repositories\APInvoiceRepositoryInterface;
-use Modules\Fina\FI\AP\Infrastructure\Persistence\EloquentAPInvoiceRepository;
-use Modules\Fina\FI\AP\Domain\Repositories\PaymentRunRepository;
-use Modules\Fina\FI\AP\Infrastructure\Persistence\PaymentRunRepositoryImpl;
-use Modules\Fina\FI\AP\Domain\Repositories\PaymentProposalRepository;
-use Modules\Fina\FI\AP\Infrastructure\Persistence\PaymentProposalRepositoryImpl;
-use Modules\Fina\FI\AP\Application\AutomaticPaymentService;
+use Modules\Fina\FI\AR\Domain\Repositories\ARCustomerFinancialsRepositoryInterface;
+use Modules\Fina\FI\AR\Infrastructure\Persistence\EloquentARCustomerFinancialsRepository;
+use Modules\Fina\FI\AR\Domain\Repositories\ARInvoiceRepositoryInterface;
+use Modules\Fina\FI\AR\Infrastructure\Persistence\EloquentARInvoiceRepository;
+use Modules\Fina\FI\AR\Domain\Repositories\DunningHistoryRepository;
+use Modules\Fina\FI\AR\Infrastructure\Persistence\DunningHistoryRepositoryImpl;
+use Modules\Fina\FI\AR\Application\DunningService;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -70,24 +70,24 @@ class FinaServiceProvider extends ServiceProvider
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
 
-        // AP Payment Program Bindings
+        // AR Dunning Process Bindings
         $this->app->bind(
-            APInvoiceRepositoryInterface::class,
-            EloquentAPInvoiceRepository::class
+            ARCustomerFinancialsRepositoryInterface::class,
+            EloquentARCustomerFinancialsRepository::class
         );
         $this->app->bind(
-            PaymentRunRepository::class,
-            PaymentRunRepositoryImpl::class
+            ARInvoiceRepositoryInterface::class,
+            EloquentARInvoiceRepository::class
         );
         $this->app->bind(
-            PaymentProposalRepository::class,
-            PaymentProposalRepositoryImpl::class
+            DunningHistoryRepository::class,
+            DunningHistoryRepositoryImpl::class
         );
-        $this->app->singleton(AutomaticPaymentService::class, function ($app) {
-            return new AutomaticPaymentService(
-                $app->make(APInvoiceRepositoryInterface::class),
-                $app->make(PaymentRunRepository::class),
-                $app->make(PaymentProposalRepository::class)
+        $this->app->singleton(DunningService::class, function ($app) {
+            return new DunningService(
+                $app->make(ARCustomerFinancialsRepositoryInterface::class),
+                $app->make(ARInvoiceRepositoryInterface::class),
+                $app->make(DunningHistoryRepository::class)
             );
         });
     }

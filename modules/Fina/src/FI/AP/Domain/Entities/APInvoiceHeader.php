@@ -18,8 +18,6 @@ class APInvoiceHeader extends Model
         'net_amount',
         'tax_amount',
         'payment_status',
-        'payment_block',
-        'payment_run_id',
         'po_number',
     ];
 }

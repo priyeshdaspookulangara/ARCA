@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
 use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
-use Modules\Fina\FI\AP\Http\Controllers\AutomaticPaymentController;
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
+use Modules\Fina\FI\AR\Http\Controllers\DunningController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
@@ -19,13 +19,13 @@ Route::prefix('fina')->group(function () {
     Route::prefix('ap')->group(function () {
         Route::post('invoices', [APInvoiceController::class, 'store']);
         Route::get('invoices/{id}', [APInvoiceController::class, 'show']);
-
-        Route::apiResource('payment-runs', AutomaticPaymentController::class)->except(['index']);
     });
 
     Route::prefix('ar')->group(function () {
         Route::post('invoices', [ARInvoiceController::class, 'store']);
         Route::get('invoices/{id}', [ARInvoiceController::class, 'show']);
+
+        Route::post('dunning-runs', [DunningController::class, 'store']);
     });
 
     Route::prefix('aa')->group(function () {

@@ -18,4 +18,9 @@ class EloquentARCustomerFinancialsRepository implements ARCustomerFinancialsRepo
             ->where('company_code_id', $companyCodeId)
             ->first();
     }
+
+    public function findAll(): \Illuminate\Support\Collection
+    {
+        return ARCustomerFinancials::all();
+    }
 }

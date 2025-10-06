@@ -16,4 +16,12 @@ class EloquentARInvoiceRepository implements ARInvoiceRepositoryInterface
     {
         return ARInvoiceHeader::find($id);
     }
+
+    public function findOverdueInvoicesByCustomerId(int $customerId): \Illuminate\Support\Collection
+    {
+        return ARInvoiceHeader::where('customer_id', $customerId)
+            ->where('payment_status', 'Open')
+            ->where('due_date', '<', now())
+            ->get();
+    }
 }

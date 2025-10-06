@@ -16,17 +16,4 @@ class EloquentAPInvoiceRepository implements APInvoiceRepositoryInterface
     {
         return APInvoiceHeader::find($id);
     }
-
-    public function findOpenInvoices(array $criteria): \Illuminate\Support\Collection
-    {
-        $query = APInvoiceHeader::where('payment_status', 'Open')
-            ->whereNull('payment_block')
-            ->whereNull('payment_run_id');
-
-        if (isset($criteria['due_date'])) {
-            $query->where('due_date', '<=', $criteria['due_date']);
-        }
-
-        return $query->get();
-    }
 }
