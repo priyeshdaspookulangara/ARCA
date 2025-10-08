@@ -13,9 +13,9 @@ class DunningHistoryRepositoryImpl implements DunningHistoryRepository
         return DunningHistory::find($id);
     }
 
-    public function getByCustomerId(int $customerId): Collection
+    public function getByCustomerId(int $customerFinancialsId): Collection
     {
-        return DunningHistory::where('customer_id', $customerId)->get();
+        return DunningHistory::where('customer_financials_id', $customerFinancialsId)->get();
     }
 
     public function save(DunningHistory $dunningHistory): void

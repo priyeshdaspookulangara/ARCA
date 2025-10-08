@@ -9,7 +9,7 @@ interface DunningHistoryRepository
 {
     public function findById(int $id): ?DunningHistory;
 
-    public function getByCustomerId(int $customerId): Collection;
+    public function getByCustomerId(int $customerFinancialsId): Collection;
 
     public function save(DunningHistory $dunningHistory): void;
 }

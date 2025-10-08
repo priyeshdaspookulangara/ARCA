@@ -5,7 +5,7 @@ namespace Modules\Fina\Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Modules\Fina\FI\AR\Domain\Entities\ARCustomerFinancials;
 use Modules\Fina\FI\AR\Domain\Entities\ARDunningProcedure;
-use Modules\Fina\Core\Entities\CompanyCode;
+use Modules\Fina\FI\GL\Domain\Entities\CompanyCode;
 use Modules\Fina\FI\GL\Domain\Entities\GLAccount;
 use Modules\Fina\FI\AP\Domain\Entities\PaymentTerm;
 

@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
-use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
 use Modules\Fina\FI\AR\Http\Controllers\DunningController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
@@ -49,5 +48,4 @@ Route::prefix('fina')->group(function () {
         Route::put('bank-statements/{id}', [BankStatementController::class, 'update']);
         Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
     });
-
 });

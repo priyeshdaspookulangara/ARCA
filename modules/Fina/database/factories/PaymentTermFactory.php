@@ -14,7 +14,7 @@ class PaymentTermFactory extends Factory
         return [
             'code' => $this->faker->unique()->word,
             'description' => $this->faker->sentence,
-            'days' => $this->faker->randomElement([15, 30, 45, 60]),
+            'rules' => json_encode(['days' => $this->faker->randomElement([15, 30, 45, 60])]),
         ];
     }
 }
