@@ -15,6 +15,7 @@ class Employee implements \JsonSerializable
     private $employmentType;
     private $onLeave = false;
     private $leaveType;
+    private $recurringDeductions = 0.0;
 
     public function __construct(string $id)
     {
@@ -126,6 +127,21 @@ class Employee implements \JsonSerializable
         $this->leaveType = $leaveType;
     }
 
+    public function getRecurringDeductions(): float
+    {
+        return $this->recurringDeductions;
+    }
+
+    public function addRecurringDeduction(float $amount): void
+    {
+        $this->recurringDeductions += $amount;
+    }
+
+    public function removeRecurringDeduction(float $amount): void
+    {
+        $this->recurringDeductions -= $amount;
+    }
+
     public function toArray(): array
     {
         return [
@@ -140,6 +156,7 @@ class Employee implements \JsonSerializable
             'employment_type' => $this->employmentType,
             'on_leave' => $this->onLeave,
             'leave_type' => $this->leaveType,
+            'recurring_deductions' => $this->recurringDeductions,
         ];
     }
 

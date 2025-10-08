@@ -14,6 +14,7 @@ use Modules\HR\TimeManagement\Application\Services\TimeRecordService;
 use Modules\HR\TimeManagement\Application\Services\AbsenceService;
 use Modules\HR\Payroll\Application\Services\PayrollService;
 use Modules\HR\Recruitment\Application\Services\RecruitmentService;
+use Modules\HR\Benefits\Application\Services\BenefitsService;
 
 /*
 |--------------------------------------------------------------------------
@@ -284,5 +285,40 @@ Route::prefix('recruitment')->group(function () {
         }
         $application = $service->updateApplicationStatus($id, $status);
         return $application ? response()->json($application) : response()->json(['error' => 'Application not found'], 404);
+    });
+});
+
+/*
+|--------------------------------------------------------------------------
+| Benefits API Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::prefix('benefits')->group(function () {
+    // Benefit Plans
+    Route::get('/plans', function (BenefitsService $service) {
+        return response()->json($service->getBenefitPlans());
+    });
+    Route::post('/plans', function (Request $request, BenefitsService $service) {
+        $name = $request->input('name');
+        $type = $request->input('type');
+        $deductionAmount = $request->input('deduction_amount');
+        if (!$name || !$type || !$deductionAmount) {
+            return response()->json(['error' => 'Name, type, and deduction amount are required'], 400);
+        }
+        return response()->json($service->createBenefitPlan($name, $type, (float)$deductionAmount), 201);
+    });
+
+    // Employee Enrollments
+    Route::get('/employees/{employeeId}/enrollments', function (string $employeeId, BenefitsService $service) {
+        return response()->json($service->getEmployeeEnrollments($employeeId));
+    });
+    Route::post('/enrollments', function (Request $request, BenefitsService $service) {
+        $employeeId = $request->input('employee_id');
+        $planId = $request->input('plan_id');
+        if (!$employeeId || !$planId) {
+            return response()->json(['error' => 'Employee ID and Plan ID are required'], 400);
+        }
+        return response()->json($service->enrollEmployeeInBenefit($employeeId, $planId), 201);
     });
 });
