@@ -60,7 +60,8 @@ class PayrollService
             if ($approvedHours > 0) {
                 $hourlyRate = $employee->getSalary() / 2080; // Assuming 2080 work hours in a year
                 $grossPay = $hourlyRate * $approvedHours;
-                $deductions = $grossPay * 0.2; // Flat 20% deduction
+                $taxDeductions = $grossPay * 0.2; // Flat 20% tax deduction
+                $totalDeductions = $taxDeductions + $employee->getRecurringDeductions();
 
                 $paycheck = new Paycheck(
                     uniqid('pc_'),

@@ -21,6 +21,10 @@ use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPayrollRunRepository;
 use Modules\HR\Payroll\Domain\Repositories\PaycheckRepositoryInterface;
 use Modules\HR\Payroll\Infrastructure\Persistence\InMemoryPaycheckRepository;
 use Modules\HR\Recruitment\Domain\Repositories\JobOpeningRepositoryInterface;
+use Modules\HR\Benefits\Domain\Repositories\BenefitPlanRepositoryInterface;
+use Modules\HR\Benefits\Infrastructure\Persistence\InMemoryBenefitPlanRepository;
+use Modules\HR\Benefits\Domain\Repositories\EmployeeEnrollmentRepositoryInterface;
+use Modules\HR\Benefits\Infrastructure\Persistence\InMemoryEmployeeEnrollmentRepository;
 use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryJobOpeningRepository;
 use Modules\HR\Recruitment\Domain\Repositories\ApplicantRepositoryInterface;
 use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryApplicantRepository;
@@ -29,6 +33,8 @@ use Modules\HR\Recruitment\Infrastructure\Persistence\InMemoryApplicationReposit
 use Illuminate\Support\Facades\Event;
 use Modules\HR\Recruitment\Domain\Events\ApplicantHiredEvent;
 use Modules\HR\PersonnelAdmin\Application\Listeners\CreateEmployeeFromHiredApplicantListener;
+use Modules\HR\Benefits\Domain\Events\BenefitEnrollmentChangedEvent;
+use Modules\HR\Payroll\Application\Listeners\UpdateEmployeeDeductionsListener;
 
 class HRServiceProvider extends ServiceProvider
 {
@@ -58,6 +64,11 @@ class HRServiceProvider extends ServiceProvider
         Event::listen(
             ApplicantHiredEvent::class,
             CreateEmployeeFromHiredApplicantListener::class
+        );
+
+        Event::listen(
+            BenefitEnrollmentChangedEvent::class,
+            UpdateEmployeeDeductionsListener::class
         );
     }
 
@@ -119,6 +130,16 @@ class HRServiceProvider extends ServiceProvider
         $this->app->singleton(
             ApplicationRepositoryInterface::class,
             InMemoryApplicationRepository::class
+        );
+
+        // Benefits Repositories
+        $this->app->singleton(
+            BenefitPlanRepositoryInterface::class,
+            InMemoryBenefitPlanRepository::class
+        );
+        $this->app->singleton(
+            EmployeeEnrollmentRepositoryInterface::class,
+            InMemoryEmployeeEnrollmentRepository::class
         );
     }
 
