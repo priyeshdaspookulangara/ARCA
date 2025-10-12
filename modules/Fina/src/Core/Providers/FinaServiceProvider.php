@@ -13,24 +13,6 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\FI\AP\Application\Services\PayrollIntegrationServiceInterface;
-use Modules\Fina\FI\AP\Infrastructure\Services\PayrollIntegrationService;
-use Modules\Fina\FI\AP\Domain\Ledger\FinaPayrollLedgerInterface;
-use Modules\Fina\FI\AP\Infrastructure\Ledger\FinaPayrollLedger;
-use Illuminate\Support\Facades\Event;
-use Modules\HR\PersonnelAdmin\Domain\Events\EmployeeSalaryUpdatedEvent;
-use Modules\HR\PersonnelAdmin\Domain\Events\EmployeePersonalDataUpdatedEvent;
-use Modules\HR\PersonnelAdmin\Domain\Events\WorkScheduleChangedEvent;
-use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveStartedEvent;
-use Modules\HR\PersonnelAdmin\Domain\Events\LongTermLeaveEndedEvent;
-use Modules\HR\TimeManagement\Domain\Events\TimeRecordApprovedEvent;
-use Modules\HR\Payroll\Domain\Events\PayrollRunCompletedEvent;
-use Modules\Fina\Listeners\UpdateEmployeeSalaryInFinaListener;
-use Modules\Fina\Listeners\UpdateEmployeePersonalDataInFinaListener;
-use Modules\Fina\Listeners\UpdateWorkScheduleInFinaListener;
-use Modules\Fina\Listeners\UpdateLeaveStatusInFinaListener;
-use Modules\Fina\Listeners\ProcessApprovedTimeRecordListener;
-use Modules\Fina\Listeners\PostPayrollResultsListener;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -56,41 +38,6 @@ class FinaServiceProvider extends ServiceProvider
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
         $this->loadRoutes();
-
-        Event::listen(
-            EmployeeSalaryUpdatedEvent::class,
-            UpdateEmployeeSalaryInFinaListener::class
-        );
-
-        Event::listen(
-            EmployeePersonalDataUpdatedEvent::class,
-            UpdateEmployeePersonalDataInFinaListener::class
-        );
-
-        Event::listen(
-            WorkScheduleChangedEvent::class,
-            UpdateWorkScheduleInFinaListener::class
-        );
-
-        Event::listen(
-            LongTermLeaveStartedEvent::class,
-            UpdateLeaveStatusInFinaListener::class
-        );
-
-        Event::listen(
-            LongTermLeaveEndedEvent::class,
-            UpdateLeaveStatusInFinaListener::class
-        );
-
-        Event::listen(
-            TimeRecordApprovedEvent::class,
-            ProcessApprovedTimeRecordListener::class
-        );
-
-        Event::listen(
-            PayrollRunCompletedEvent::class,
-            PostPayrollResultsListener::class
-        );
     }
 
     /**
@@ -115,9 +62,6 @@ class FinaServiceProvider extends ServiceProvider
         $this->app->singleton(BankStatementService::class, function ($app) {
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
-
-        $this->app->bind(PayrollIntegrationServiceInterface::class, PayrollIntegrationService::class);
-        $this->app->singleton(FinaPayrollLedgerInterface::class, FinaPayrollLedger::class);
     }
 
     /**
