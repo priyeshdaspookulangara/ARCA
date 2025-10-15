@@ -7,8 +7,16 @@ use Modules\HR\TimeManagement\Domain\Repositories\TimeRecordRepositoryInterface;
 use Modules\HR\TimeManagement\Domain\Repositories\AbsenceRepositoryInterface;
 use Modules\Fina\FI\AP\Domain\Ledger\FinaPayrollLedgerInterface;
 
+use Modules\Fina\Core\Providers\FinaServiceProvider;
+
 class TimeManagementModuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->register(FinaServiceProvider::class);
+    }
+
     public function test_can_record_and_approve_time()
     {
         $finaLedger = $this->app->make(FinaPayrollLedgerInterface::class);

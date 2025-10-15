@@ -21,5 +21,3 @@ Route::get('/status', function () {
 
 // Example Document Management Routes
 // Route::apiResource('documents', Modules\PLM\DocumentMgt\Http\DocumentController::class);
-
-EOL

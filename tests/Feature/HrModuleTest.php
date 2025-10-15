@@ -6,8 +6,16 @@ use Tests\TestCase;
 use Modules\HR\PersonnelAdmin\Domain\Repositories\EmployeeRepositoryInterface;
 use Modules\Fina\FI\AP\Domain\Ledger\FinaPayrollLedgerInterface;
 
+use Modules\Fina\Core\Providers\FinaServiceProvider;
+
 class HrModuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->register(FinaServiceProvider::class);
+    }
+
     public function test_salary_change_endpoint_updates_hr_repo_and_fina_ledger()
     {
         $finaLedger = $this->app->make(FinaPayrollLedgerInterface::class);

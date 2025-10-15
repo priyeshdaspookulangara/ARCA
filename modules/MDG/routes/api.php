@@ -18,5 +18,3 @@ Route::get('/status', function () {
 // Example Master Data Object Routes (e.g., for searching active data)
 // Route::get('materials', [Modules\MDG\MasterDataObjects\Material\Http\MaterialController::class, 'index']);
 // Route::get('business-partners/{bpId}', [Modules\MDG\MasterDataObjects\BusinessPartner\Http\BusinessPartnerController::class, 'show']);
-
-EOL

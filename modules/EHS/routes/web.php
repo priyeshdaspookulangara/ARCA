@@ -9,4 +9,3 @@ Route::get('/ehs-dashboard', function () {
 
 // Example:
 // Route::get('/incidents/report-public', 'PublicIncidentReportController@create')->name('ehs.incidents.report.public'); // If anonymous reporting is allowed
-EOL
