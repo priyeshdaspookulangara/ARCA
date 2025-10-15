@@ -3,11 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
 use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
-use Modules\Fina\FI\AR\Http\Controllers\DunningController;
 use Modules\Fina\FI\AA\Http\Controllers\AssetController;
 use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
+use Modules\Fina\CO\PA\Http\Controllers\MarketSegmentController;
+use Modules\Fina\CO\PA\Http\Controllers\ProfitabilityReportController;
 
 Route::prefix('fina')->group(function () {
     Route::prefix('gl')->group(function () {
@@ -23,8 +24,6 @@ Route::prefix('fina')->group(function () {
     Route::prefix('ar')->group(function () {
         Route::post('invoices', [ARInvoiceController::class, 'store']);
         Route::get('invoices/{id}', [ARInvoiceController::class, 'show']);
-
-        Route::post('dunning-runs', [DunningController::class, 'store']);
     });
 
     Route::prefix('aa')->group(function () {
@@ -47,5 +46,12 @@ Route::prefix('fina')->group(function () {
         Route::get('bank-statements/{id}', [BankStatementController::class, 'show']);
         Route::put('bank-statements/{id}', [BankStatementController::class, 'update']);
         Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
+    });
+
+    Route::prefix('co')->group(function () {
+        Route::prefix('pa')->group(function () {
+            Route::apiResource('market-segments', MarketSegmentController::class);
+            Route::apiResource('profitability-reports', ProfitabilityReportController::class);
+        });
     });
 });

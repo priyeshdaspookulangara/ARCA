@@ -15,12 +15,5 @@ class ARCustomerFinancials extends Model
         'payment_terms_id',
         'credit_limit',
         'dunning_procedure_id',
-        'last_dunned_on',
-        'dunning_level',
     ];
-
-    public function dunningProcedure()
-    {
-        return $this->belongsTo(ARDunningProcedure::class, 'dunning_procedure_id');
-    }
 }

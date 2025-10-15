@@ -13,13 +13,10 @@ use Modules\Fina\FI\BL\Infrastructure\Persistence\EloquentBankStatementRepositor
 use Modules\Fina\FI\BL\Application\BankMasterService;
 use Modules\Fina\FI\BL\Application\BankAccountService;
 use Modules\Fina\FI\BL\Application\BankStatementService;
-use Modules\Fina\FI\AR\Domain\Repositories\ARCustomerFinancialsRepositoryInterface;
-use Modules\Fina\FI\AR\Infrastructure\Persistence\EloquentARCustomerFinancialsRepository;
-use Modules\Fina\FI\AR\Domain\Repositories\ARInvoiceRepositoryInterface;
-use Modules\Fina\FI\AR\Infrastructure\Persistence\EloquentARInvoiceRepository;
-use Modules\Fina\FI\AR\Domain\Repositories\DunningHistoryRepository;
-use Modules\Fina\FI\AR\Infrastructure\Persistence\DunningHistoryRepositoryImpl;
-use Modules\Fina\FI\AR\Application\DunningService;
+use Modules\Fina\CO\PA\Domain\Repositories\MarketSegmentRepository;
+use Modules\Fina\CO\PA\Infrastructure\Repositories\EloquentMarketSegmentRepository;
+use Modules\Fina\CO\PA\Domain\Repositories\ProfitabilityReportRepository;
+use Modules\Fina\CO\PA\Infrastructure\Repositories\EloquentProfitabilityReportRepository;
 
 class FinaServiceProvider extends ServiceProvider
 {
@@ -70,26 +67,8 @@ class FinaServiceProvider extends ServiceProvider
             return new BankStatementService($app->make(BankStatementRepositoryInterface::class));
         });
 
-        // AR Dunning Process Bindings
-        $this->app->bind(
-            ARCustomerFinancialsRepositoryInterface::class,
-            EloquentARCustomerFinancialsRepository::class
-        );
-        $this->app->bind(
-            ARInvoiceRepositoryInterface::class,
-            EloquentARInvoiceRepository::class
-        );
-        $this->app->bind(
-            DunningHistoryRepository::class,
-            DunningHistoryRepositoryImpl::class
-        );
-        $this->app->singleton(DunningService::class, function ($app) {
-            return new DunningService(
-                $app->make(ARCustomerFinancialsRepositoryInterface::class),
-                $app->make(ARInvoiceRepositoryInterface::class),
-                $app->make(DunningHistoryRepository::class)
-            );
-        });
+        $this->app->bind(MarketSegmentRepository::class, EloquentMarketSegmentRepository::class);
+        $this->app->bind(ProfitabilityReportRepository::class, EloquentProfitabilityReportRepository::class);
     }
 
     /**
