@@ -176,6 +176,7 @@ return [
         Modules\Fina\Providers\FinaServiceProvider::class,
         Modules\EWM\Core\Providers\EwmServiceProvider::class,
         Modules\MM\Providers\MMServiceProvider::class,
+        Modules\SD\Providers\SDServiceProvider::class,
         Modules\LSCM\Core\Providers\LscmServiceProvider::class,
         Modules\HR\Providers\HRServiceProvider::class,
         Modules\PS\Core\Providers\PsServiceProvider::class,

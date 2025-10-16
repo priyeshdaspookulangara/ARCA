@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\Fina\Providers;
+namespace Modules\MM\Providers;
 
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Modules\Fina\Listeners\PostGoodsReceivedJournal;
-use Modules\MM\Valuation\Application\Events\GoodsReceived;
-use Modules\SD\Events\BillingGeneratedEvent;
-use Modules\Fina\Listeners\PostSalesJournalListener;
+use Modules\SD\Events\SalesOrderCreatedEvent;
+use Modules\MM\InventoryManagement\Application\Listeners\ReserveStockListener;
+use Modules\SD\Events\DeliveryCompletedEvent;
+use Modules\MM\InventoryManagement\Application\Listeners\TriggerGoodsIssueListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -16,11 +16,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
-        GoodsReceived::class => [
-            PostGoodsReceivedJournal::class,
+        SalesOrderCreatedEvent::class => [
+            ReserveStockListener::class,
         ],
-        BillingGeneratedEvent::class => [
-            PostSalesJournalListener::class,
+        DeliveryCompletedEvent::class => [
+            TriggerGoodsIssueListener::class,
         ],
     ];
 

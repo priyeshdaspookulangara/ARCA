@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bacef639eeef49bae72e34da109de5c2",
+    "content-hash": "4a622a951877abfafe805ff01736f906",
     "packages": [
         {
             "name": "arca-modules/auth-mgt",
@@ -921,6 +921,38 @@
                 }
             ],
             "description": "Project System (PS) Module for the Modular ERP System.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "erp-modules/sd",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "modules/SD",
+                "reference": "c0220f401b1673a6ddecd141d3eec81be9ea12f0"
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "erp-module",
+            "autoload": {
+                "psr-4": {
+                    "Modules\\SD\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jules",
+                    "email": "jules@agent.com"
+                }
+            ],
+            "description": "Sales and Distribution (SD) Module for the Modular ERP System.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
