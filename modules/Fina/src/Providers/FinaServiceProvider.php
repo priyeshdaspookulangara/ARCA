@@ -15,6 +15,8 @@ class FinaServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->register(EventServiceProvider::class);
+
         // PA Bindings
         $this->app->bind(
             MarketSegmentRepository::class,

@@ -6,4 +6,3 @@ use Illuminate\Support\Facades\Route;
 Route::get('/plm-info', function () {
     return "ARCA PLM Module Information Page (Web Route)";
 });
-EOL

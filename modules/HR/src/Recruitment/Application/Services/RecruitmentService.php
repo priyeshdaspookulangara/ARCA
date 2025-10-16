@@ -4,8 +4,6 @@ namespace Modules\HR\Recruitment\Application\Services;
 
 use Modules\HR\Recruitment\Domain\Entities\JobOpening;
 use Modules\HR\Recruitment\Domain\Entities\Applicant;
-use Modules\HR\Recruitment\Domain\Entities\JobOpening;
-use Modules\HR\Recruitment\Domain\Entities\Applicant;
 use Modules\HR\Recruitment\Domain\Entities\Application;
 use Modules\HR\Recruitment\Domain\Repositories\JobOpeningRepositoryInterface;
 use Modules\HR\Recruitment\Domain\Repositories\ApplicantRepositoryInterface;

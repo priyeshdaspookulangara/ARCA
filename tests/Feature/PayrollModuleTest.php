@@ -7,8 +7,16 @@ use Modules\HR\Payroll\Domain\Repositories\PayrollRunRepositoryInterface;
 use Modules\HR\Payroll\Domain\Repositories\PaycheckRepositoryInterface;
 use Modules\Fina\FI\AP\Domain\Ledger\FinaPayrollLedgerInterface;
 
+use Modules\Fina\Core\Providers\FinaServiceProvider;
+
 class PayrollModuleTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->app->register(FinaServiceProvider::class);
+    }
+
     public function test_can_execute_payroll_run_and_post_to_fina()
     {
         $finaLedger = $this->app->make(FinaPayrollLedgerInterface::class);

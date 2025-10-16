@@ -2,31 +2,15 @@
 
 namespace Modules\Fina\Tests;
 
-use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Tests\TestCase as BaseTestCase;
+
+use Illuminate\Support\Facades\Artisan;
 
 abstract class TestCase extends BaseTestCase
 {
-    use DatabaseMigrations;
-
     protected function setUp(): void
     {
         parent::setUp();
-        $this->artisan('migrate', [
-            '--path' => 'modules/Fina/database/migrations',
-            '--realpath' => true,
-        ]);
-    }
-
-    /**
-     * Creates the application.
-     *
-     * @return \Illuminate\Foundation\Application
-     */
-    public function createApplication()
-    {
-        $app = require __DIR__.'/../../../../bootstrap/app.php';
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-        return $app;
+        Artisan::call('migrate', ['--path' => 'modules/Fina/database/migrations']);
     }
 }

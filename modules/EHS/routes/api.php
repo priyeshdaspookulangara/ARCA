@@ -16,4 +16,3 @@ Route::get('/status', function () {
 // Route::apiResource('risk-assessments', Modules\EHS\RiskMgt\Http\RiskAssessmentController::class);
 
 // ... and so on for HazMat, WasteMgt, OccHealth, Compliance APIs
-EOL

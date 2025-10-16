@@ -1,0 +1,20 @@
+{
+    "name": "erp-modules/sd",
+    "description": "Sales and Distribution (SD) Module for the Modular ERP System.",
+    "type": "erp-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jules",
+            "email": "jules@agent.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\SD\\": "src/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}
