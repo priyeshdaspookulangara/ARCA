@@ -67,6 +67,36 @@ class CrmServiceProvider extends ServiceProvider
             \Modules\CRM\Sales\Domain\InteractionHistoryRepositoryInterface::class,
             \Modules\CRM\Sales\Infrastructure\Persistence\EloquentInteractionHistoryRepository::class
         );
+
+        $this->app->bind(
+            \Modules\CRM\SalesForceAutomation\Domain\TerritoryRepositoryInterface::class,
+            \Modules\CRM\SalesForceAutomation\Infrastructure\Persistence\EloquentTerritoryRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\SalesForceAutomation\Domain\QuotaRepositoryInterface::class,
+            \Modules\CRM\SalesForceAutomation\Infrastructure\Persistence\EloquentQuotaRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Product\Domain\ProductCatalogRepositoryInterface::class,
+            \Modules\CRM\Product\Infrastructure\Persistence\EloquentProductCatalogRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\CCC\Domain\CommunicationChannelRepositoryInterface::class,
+            \Modules\CRM\CCC\Infrastructure\Persistence\EloquentCommunicationChannelRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\CCC\Domain\MessageRepositoryInterface::class,
+            \Modules\CRM\CCC\Infrastructure\Persistence\EloquentMessageRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Compliance\Domain\ConsentRepositoryInterface::class,
+            \Modules\CRM\Compliance\Infrastructure\Persistence\EloquentConsentRepository::class
+        );
     }
 
     /**

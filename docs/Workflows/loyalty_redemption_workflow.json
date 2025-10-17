@@ -1,0 +1,73 @@
+{
+  "name": "Loyalty Redemption Workflow",
+  "version": "1.0",
+  "steps": [
+    {
+      "name": "Initiate Redemption",
+      "description": "Customer initiates a point redemption request at the Point of Sale (POS).",
+      "actor": "POS Terminal",
+      "triggers": [
+        {
+          "type": "API_CALL",
+          "endpoint": "/api/crm/loyalty/{customerId}/redeem",
+          "payload": {
+            "programId": "integer",
+            "points": "integer"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validate Balance",
+      "description": "CRM system validates if the customer has a sufficient point balance.",
+      "actor": "CRM LoyaltyService",
+      "dependencies": ["Initiate Redemption"],
+      "outcomes": [
+        {
+          "condition": "balance >= points",
+          "next_step": "Process Redemption"
+        },
+        {
+          "condition": "balance < points",
+          "next_step": "Send Rejection"
+        }
+      ]
+    },
+    {
+      "name": "Process Redemption",
+      "description": "CRM deducts the points from the customer's account and logs the transaction.",
+      "actor": "CRM LoyaltyService",
+      "dependencies": ["Validate Balance"],
+      "actions": [
+        "Create a 'redemption' transaction in the loyalty_points table."
+      ]
+    },
+    {
+      "name": "Send Confirmation",
+      "description": "CRM sends a success confirmation back to the POS terminal.",
+      "actor": "CRM LoyaltyController",
+      "dependencies": ["Process Redemption"],
+      "actions": [
+        "Return a 200 OK HTTP response."
+      ]
+    },
+    {
+      "name": "Send Rejection",
+      "description": "CRM sends a rejection message back to the POS terminal due to insufficient points.",
+      "actor": "CRM LoyaltyController",
+      "dependencies": ["Validate Balance"],
+      "actions": [
+        "Return a 422 Unprocessable Entity HTTP response."
+      ]
+    },
+    {
+      "name": "Post Financial Liability",
+      "description": "CRM dispatches an event to notify the FINA module of the loyalty liability change.",
+      "actor": "CRM EventBus",
+      "dependencies": ["Process Redemption"],
+      "actions": [
+        "Dispatch 'LoyaltyPointsRedeemed' event with transaction details."
+      ]
+    }
+  ]
+}

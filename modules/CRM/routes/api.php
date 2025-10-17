@@ -8,7 +8,13 @@ use Modules\CRM\Http\Controllers\LeadController;
 use Modules\CRM\Http\Controllers\LoyaltyController;
 use Modules\CRM\Http\Controllers\InteractionHistoryController;
 use Modules\CRM\Http\Controllers\OpportunityController;
+use Modules\CRM\Http\Controllers\CommunicationChannelController;
+use Modules\CRM\Http\Controllers\ConsentController;
+use Modules\CRM\Http\Controllers\MessageController;
+use Modules\CRM\Http\Controllers\ProductCatalogController;
+use Modules\CRM\Http\Controllers\QuotaController;
 use Modules\CRM\Http\Controllers\ServiceTicketController;
+use Modules\CRM\Http\Controllers\TerritoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +33,12 @@ Route::prefix('crm')->group(function () {
     Route::apiResource('opportunities', OpportunityController::class);
     Route::apiResource('activity-logs', ActivityLogController::class);
     Route::apiResource('interaction-histories', InteractionHistoryController::class);
+    Route::apiResource('territories', TerritoryController::class);
+    Route::apiResource('quotas', QuotaController::class);
+    Route::apiResource('product-catalogs', ProductCatalogController::class);
+    Route::apiResource('communication-channels', CommunicationChannelController::class);
+    Route::apiResource('messages', MessageController::class);
+    Route::apiResource('consents', ConsentController::class);
     Route::apiResource('campaigns', CampaignController::class);
     Route::apiResource('service-tickets', ServiceTicketController::class);
 
