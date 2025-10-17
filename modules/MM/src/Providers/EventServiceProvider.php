@@ -7,6 +7,8 @@ use Modules\SD\Events\SalesOrderCreatedEvent;
 use Modules\MM\InventoryManagement\Application\Listeners\ReserveStockListener;
 use Modules\SD\Events\DeliveryCompletedEvent;
 use Modules\MM\InventoryManagement\Application\Listeners\TriggerGoodsIssueListener;
+use Modules\POS\Events\SaleCompletedEvent;
+use Modules\MM\InventoryManagement\Application\Listeners\DeductStockListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         DeliveryCompletedEvent::class => [
             TriggerGoodsIssueListener::class,
+        ],
+        SaleCompletedEvent::class => [
+            DeductStockListener::class,
         ],
     ];
 
