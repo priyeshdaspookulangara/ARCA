@@ -42,6 +42,31 @@ class CrmServiceProvider extends ServiceProvider
             // return new CrmModuleService(); // Example of a core service for the module
             return new \stdClass(); // Placeholder
         });
+
+        $this->app->bind(
+            \Modules\CRM\CustomerMaster\Domain\CustomerRepositoryInterface::class,
+            \Modules\CRM\CustomerMaster\Infrastructure\Persistence\EloquentCustomerRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Sales\Domain\LeadRepositoryInterface::class,
+            \Modules\CRM\Sales\Infrastructure\Persistence\EloquentLeadRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Sales\Domain\OpportunityRepositoryInterface::class,
+            \Modules\CRM\Sales\Infrastructure\Persistence\EloquentOpportunityRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Sales\Domain\ActivityLogRepositoryInterface::class,
+            \Modules\CRM\Sales\Infrastructure\Persistence\EloquentActivityLogRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\CRM\Sales\Domain\InteractionHistoryRepositoryInterface::class,
+            \Modules\CRM\Sales\Infrastructure\Persistence\EloquentInteractionHistoryRepository::class
+        );
     }
 
     /**

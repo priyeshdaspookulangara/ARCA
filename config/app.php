@@ -167,6 +167,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Modules\CRM\Core\Providers\CrmServiceProvider::class,
+        Modules\CRM\Core\Providers\EventServiceProvider::class,
         Modules\AuthMgt\Core\Providers\AuthServiceProvider::class,
         Modules\ISRetail\Core\Providers\IsRetailServiceProvider::class,
         Modules\EHS\Core\Providers\EhsServiceProvider::class,
