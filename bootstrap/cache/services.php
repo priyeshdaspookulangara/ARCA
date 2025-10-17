@@ -40,9 +40,10 @@
     36 => 'Modules\\EWM\\Core\\Providers\\EwmServiceProvider',
     37 => 'Modules\\MM\\Providers\\MMServiceProvider',
     38 => 'Modules\\SD\\Providers\\SDServiceProvider',
-    39 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
-    40 => 'Modules\\HR\\Providers\\HRServiceProvider',
-    41 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
+    39 => 'Modules\\POS\\Providers\\POSServiceProvider',
+    40 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
+    41 => 'Modules\\HR\\Providers\\HRServiceProvider',
+    42 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
   ),
   'eager' =>
   array (
@@ -73,9 +74,10 @@
     24 => 'Modules\\EWM\\Core\\Providers\\EwmServiceProvider',
     25 => 'Modules\\MM\\Providers\\MMServiceProvider',
     26 => 'Modules\\SD\\Providers\\SDServiceProvider',
-    27 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
-    28 => 'Modules\\HR\\Providers\\HRServiceProvider',
-    29 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
+    27 => 'Modules\\POS\\Providers\\POSServiceProvider',
+    28 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
+    29 => 'Modules\\HR\\Providers\\HRServiceProvider',
+    30 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
   ),
   'deferred' =>
   array (

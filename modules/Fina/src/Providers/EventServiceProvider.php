@@ -7,6 +7,8 @@ use Modules\Fina\Listeners\PostGoodsReceivedJournal;
 use Modules\MM\Valuation\Application\Events\GoodsReceived;
 use Modules\SD\Events\BillingGeneratedEvent;
 use Modules\Fina\Listeners\PostSalesJournalListener;
+use Modules\POS\Events\SaleCompletedEvent;
+use Modules\Fina\Listeners\PostSaleAndCOGSJournalListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         BillingGeneratedEvent::class => [
             PostSalesJournalListener::class,
+        ],
+        SaleCompletedEvent::class => [
+            PostSaleAndCOGSJournalListener::class,
         ],
     ];
 
