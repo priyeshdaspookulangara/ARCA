@@ -1,0 +1,74 @@
+{
+  "name": "Service Request Workflow",
+  "version": "1.0",
+  "steps": [
+    {
+      "name": "Create Service Ticket",
+      "description": "A service ticket is created in the CRM system, either manually by an agent or through an external channel (e.g., website form).",
+      "actor": "CRM ServiceTicketController",
+      "triggers": [
+        {
+          "type": "API_CALL",
+          "endpoint": "/api/crm/service-tickets",
+          "payload": {
+            "customer_id": "integer",
+            "subject": "string",
+            "description": "string",
+            "priority": "string"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Assign Ticket",
+      "description": "The service ticket is assigned to a service agent, either manually or automatically based on rules.",
+      "actor": "CRM ServiceTicketService",
+      "dependencies": ["Create Service Ticket"],
+      "actions": [
+        "Update the 'assigned_to' field on the service ticket."
+      ]
+    },
+    {
+      "name": "Track SLA",
+      "description": "The system tracks the service level agreement (SLA) for the ticket.",
+      "actor": "CRM System",
+      "dependencies": ["Assign Ticket"],
+      "actions": [
+        "Start a timer based on the ticket's priority and SLA policy."
+      ]
+    },
+    {
+      "name": "Resolve Ticket",
+      "description": "The service agent resolves the customer's issue and updates the ticket status.",
+      "actor": "CRM ServiceTicketService",
+      "dependencies": ["Assign Ticket"],
+      "actions": [
+        "Update the ticket status to 'closed'."
+      ]
+    },
+    {
+      "name": "Send Resolution Notification",
+      "description": "The system sends a notification to the customer that their issue has been resolved.",
+      "actor": "CRM NotificationService",
+      "dependencies": ["Resolve Ticket"],
+      "actions": [
+        "Send an email or SMS to the customer."
+      ]
+    },
+    {
+      "name": "Handle Escalation",
+      "description": "If the SLA is breached, the ticket is escalated to a higher-level support tier.",
+      "actor": "CRM System",
+      "dependencies": ["Track SLA"],
+      "triggers": [
+        {
+          "type": "SLA_BREACH",
+          "condition": "timer > sla_policy.response_time"
+        }
+      ],
+      "actions": [
+        "Re-assign the ticket to the escalation team and update its priority."
+      ]
+    }
+  ]
+}

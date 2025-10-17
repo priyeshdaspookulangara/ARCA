@@ -1,0 +1,92 @@
+{
+  "name": "Campaign Management Workflow",
+  "version": "1.0",
+  "steps": [
+    {
+      "name": "Create Campaign",
+      "description": "A marketing manager creates a new campaign in the CRM system.",
+      "actor": "CRM CampaignController",
+      "triggers": [
+        {
+          "type": "API_CALL",
+          "endpoint": "/api/crm/campaigns",
+          "payload": {
+            "name": "string",
+            "description": "string",
+            "start_date": "date",
+            "end_date": "date"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Define Audience",
+      "description": "The marketing manager defines the target audience for the campaign using segmentation tags.",
+      "actor": "CRM CampaignService",
+      "dependencies": ["Create Campaign"],
+      "actions": [
+        "Associate segmentation tags with the campaign."
+      ]
+    },
+    {
+      "name": "Create Promotions",
+      "description": "The marketing manager creates promotions to be used in the campaign.",
+      "actor": "CRM PromotionController",
+      "dependencies": ["Create Campaign"],
+      "actions": [
+        "Create promotion records and link them to the campaign."
+      ]
+    },
+    {
+      "name": "Launch Campaign",
+      "description": "The campaign is launched, making the promotions active.",
+      "actor": "CRM CampaignService",
+      "dependencies": ["Define Audience", "Create Promotions"],
+      "actions": [
+        "Update the campaign status to 'active'.",
+        "Dispatch a 'CampaignLaunched' event."
+      ]
+    },
+    {
+      "name": "Sync Promotions to SD/POS",
+      "description": "The CRM system syncs the active promotions to the Sales & Distribution (SD) and Point of Sale (POS) modules.",
+      "actor": "CRM EventBus",
+      "dependencies": ["Launch Campaign"],
+      "listeners": [
+        {
+          "event": "CampaignLaunched",
+          "handler": "SDPromotionSyncListener"
+        },
+        {
+          "event": "CampaignLaunched",
+          "handler": "POSPromotionSyncListener"
+        }
+      ]
+    },
+    {
+      "name": "Track Campaign Performance",
+      "description": "The system tracks the performance of the campaign by analyzing sales data from the SD and POS modules.",
+      "actor": "CRM AnalyticsService",
+      "dependencies": ["Launch Campaign"],
+      "actions": [
+        "Aggregate sales data for the campaign's promotions.",
+        "Calculate ROI and other campaign metrics."
+      ]
+    },
+    {
+      "name": "Complete Campaign",
+      "description": "The campaign reaches its end date and is marked as complete.",
+      "actor": "CRM System",
+      "dependencies": ["Launch Campaign"],
+      "triggers": [
+        {
+          "type": "SCHEDULED_JOB",
+          "condition": "current_date >= campaign.end_date"
+        }
+      ],
+      "actions": [
+        "Update the campaign status to 'completed'."
+      ]
+    }
+  ]
+}
