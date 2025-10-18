@@ -183,6 +183,7 @@ return [
         Modules\LSCM\Core\Providers\LscmServiceProvider::class,
         Modules\HR\Providers\HRServiceProvider::class,
         Modules\PS\Core\Providers\PsServiceProvider::class,
+        Modules\RTH\Core\Providers\RTHServiceProvider::class,
     ])->toArray(),
 
     /*
