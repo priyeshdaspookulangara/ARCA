@@ -1,53 +1,34 @@
 {
-    "name": "your-vendor/modular-erp",
+    "$schema": "https://getcomposer.org/schema.json",
+    "name": "laravel/laravel",
     "type": "project",
-    "description": "A Highly Modular ERP System.",
-    "keywords": ["erp", "modular", "php", "laravel"],
+    "description": "The skeleton application for the Laravel framework.",
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.1",
-        "laravel/framework": "^10.0",
-        "arca-modules/auth-mgt": "*",
-        "erp-modules/crm": "*",
-        "arca-modules/ehs": "*",
-        "arca-modules/ewm": "*",
-        "erp-modules/fina": "*",
-        "arca-modules/grc": "*",
-        "erp-modules/hr": "*",
-        "arca-modules/is-retail": "*",
-        "erp-modules/lscm": "*",
-        "arca-modules/mdg": "*",
-        "arca-modules/plm": "*",
-        "erp-modules/ps": "*",
-        "erp-modules/mm": "*",
-        "erp-modules/sd": "*",
-        "erp-modules/rth": "*"
+        "php": "^8.2",
+        "laravel/framework": "^12.0",
+        "laravel/tinker": "^2.10.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^10.0",
-        "mockery/mockery": "^1.5",
-        "fakerphp/faker": "^1.9.1"
+        "fakerphp/faker": "^1.23",
+        "laravel/pail": "^1.2.2",
+        "laravel/pint": "^1.24",
+        "laravel/sail": "^1.41",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.6",
+        "phpunit/phpunit": "^11.5.3"
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "modules/",
-            "Modules\\MM\\": "modules/MM/src/",
-            "Modules\\SD\\": "modules/SD/src/"
-        },
-        "files": [
-            "app/Helpers/module_path.php"
-        ]
+            "Database\\Seeders\\": "database/seeders/"
+        }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Modules\\Fina\\Tests\\": "modules/Fina/tests/",
-            "Modules\\HR\\Tests\\": "modules/HR/tests/",
-            "Modules\\MM\\Tests\\": "modules/MM/tests/",
-            "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/"
+            "Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -55,35 +36,40 @@
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
         ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite --kill-others"
+        ],
+        "test": [
+            "@php artisan config:clear --ansi",
+            "@php artisan test"
         ]
     },
     "extra": {
         "laravel": {
-            "providers": [
-                "Modules\\MM\\Providers\\MMServiceProvider"
-            ],
             "dont-discover": []
         }
     },
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "path",
-            "url": "modules/*",
-            "options": {
-                "symlink": true
-            }
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
-    ]
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
 }
