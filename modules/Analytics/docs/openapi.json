@@ -1,0 +1,60 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "ARCA Analytics API",
+    "version": "1.0.0",
+    "description": "API for the Analytics (Reporting & Customer Intelligence) module of the ARCA ERP system."
+  },
+  "paths": {
+    "/api/analytics/dashboards/pos": {
+      "get": {
+        "summary": "Get POS dashboard data",
+        "responses": {
+          "200": {
+            "description": "Data for the POS dashboard."
+          }
+        }
+      }
+    },
+    "/api/analytics/dashboards/finance": {
+      "get": {
+        "summary": "Get Finance dashboard data",
+        "responses": {
+          "200": {
+            "description": "Data for the Finance dashboard."
+          }
+        }
+      }
+    },
+    "/api/analytics/dashboards/inventory": {
+      "get": {
+        "summary": "Get Inventory dashboard data",
+        "responses": {
+          "200": {
+            "description": "Data for the Inventory dashboard."
+          }
+        }
+      }
+    },
+    "/api/analytics/dashboards/crm": {
+      "get": {
+        "summary": "Get CRM dashboard data",
+        "responses": {
+          "200": {
+            "description": "Data for the CRM dashboard."
+          }
+        }
+      }
+    },
+    "/api/analytics/customer-metrics": {
+      "get": {
+        "summary": "Get customer intelligence metrics",
+        "responses": {
+          "200": {
+            "description": "Customer intelligence metrics (RFM, CLV, etc.)."
+          }
+        }
+      }
+    }
+  }
+}

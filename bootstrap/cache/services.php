@@ -46,6 +46,8 @@
     42 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
     43 => 'Modules\\HR\\Providers\\HRServiceProvider',
     44 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
+    45 => 'Modules\\Analytics\\Core\\Providers\\AnalyticsServiceProvider',
+    46 => 'Modules\\Analytics\\Core\\Providers\\EventServiceProvider',
   ),
   'eager' =>
   array (
@@ -82,6 +84,8 @@
     30 => 'Modules\\LSCM\\Core\\Providers\\LscmServiceProvider',
     31 => 'Modules\\HR\\Providers\\HRServiceProvider',
     32 => 'Modules\\PS\\Core\\Providers\\PsServiceProvider',
+    33 => 'Modules\\Analytics\\Core\\Providers\\AnalyticsServiceProvider',
+    34 => 'Modules\\Analytics\\Core\\Providers\\EventServiceProvider',
   ),
   'deferred' =>
   array (

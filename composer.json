@@ -20,7 +20,8 @@
         "arca-modules/plm": "*",
         "erp-modules/ps": "*",
         "erp-modules/mm": "*",
-        "erp-modules/sd": "*"
+        "erp-modules/sd": "*",
+        "arca-modules/analytics": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",
@@ -34,7 +35,8 @@
             "Database\\Seeders\\": "database/seeders/",
             "Modules\\": "modules/",
             "Modules\\MM\\": "modules/MM/src/",
-            "Modules\\SD\\": "modules/SD/src/"
+            "Modules\\SD\\": "modules/SD/src/",
+            "Modules\\Analytics\\": "modules/Analytics/src/"
         },
         "files": [
             "app/Helpers/module_path.php"
