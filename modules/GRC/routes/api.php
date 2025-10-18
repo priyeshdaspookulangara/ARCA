@@ -1,19 +1,28 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\GRC\AccessControl\Http\Controllers\RoleController;
+use Modules\GRC\AccessControl\Http\Controllers\PermissionController;
+use Modules\GRC\AuditMgt\Http\Controllers\AuditLogController;
+use Modules\GRC\ProcessControl\Http\Controllers\SoDRuleController;
+use Modules\GRC\ComplianceMgt\Http\Controllers\ConsentController;
 
-// All routes here are assumed to be under 'api/grc' prefix and appropriate admin auth middleware.
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-Route::get('/status', function () {
-    return response()->json(['module' => 'ARCA GRC Main', 'status' => 'active_via_api_route']);
-});
+Route::apiResource('roles', RoleController::class);
+Route::apiResource('permissions', PermissionController::class);
+Route::apiResource('sod-rules', SoDRuleController::class);
+Route::apiResource('consents', ConsentController::class);
 
-// Example Access Control Routes
-// Route::post('/sod-analysis/run', [Modules\GRC\AccessControl\Http\SoDAnalysisController::class, 'runAnalysis']);
-// Route::get('/user-provisioning/requests', [Modules\GRC\AccessControl\Http\UserProvisioningController::class, 'index']);
-
-// Example Process Control Routes
-// Route::apiResource('internal-controls', Modules\GRC\ProcessControl\Http\InternalControlController::class);
-// Route::apiResource('ccm-exceptions', Modules\GRC\ProcessControl\Http\CcmExceptionController::class);
-
-// ... and so on for RiskMgt, AuditMgt, ComplianceMgt APIs
+Route::post('data-request', [ConsentController::class, 'dataRequest']);
+Route::post('check-policy', [SoDRuleController::class, 'checkPolicy']);
+Route::get('audit/query', [AuditLogController::class, 'query']);

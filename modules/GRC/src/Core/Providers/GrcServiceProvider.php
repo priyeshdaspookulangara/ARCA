@@ -27,7 +27,29 @@ class GrcServiceProvider extends ServiceProvider
         });
 
         // Register Application Services, Repositories for each GRC pillar
-        // e.g., $this->app->bind(InternalControlRepositoryInterface::class, EloquentInternalControlRepository::class);
+        $this->app->bind(
+            \Modules\GRC\AccessControl\Domain\RoleRepositoryInterface::class,
+            \Modules\GRC\AccessControl\Infrastructure\Persistence\EloquentRoleRepository::class
+        );
+        $this->app->bind(
+            \Modules\GRC\AccessControl\Domain\PermissionRepositoryInterface::class,
+            \Modules\GRC\AccessControl\Infrastructure\Persistence\EloquentPermissionRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\GRC\AuditMgt\Domain\AuditLogRepositoryInterface::class,
+            \Modules\GRC\AuditMgt\Infrastructure\Persistence\EloquentAuditLogRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\GRC\ProcessControl\Domain\SoDRuleRepositoryInterface::class,
+            \Modules\GRC\ProcessControl\Infrastructure\Persistence\EloquentSoDRuleRepository::class
+        );
+
+        $this->app->bind(
+            \Modules\GRC\ComplianceMgt\Domain\ConsentRepositoryInterface::class,
+            \Modules\GRC\ComplianceMgt\Infrastructure\Persistence\EloquentConsentRepository::class
+        );
     }
 
     protected function registerConfig()
