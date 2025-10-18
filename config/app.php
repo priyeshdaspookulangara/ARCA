@@ -174,6 +174,7 @@ return [
         Modules\MDG\Core\Providers\MdgServiceProvider::class,
         Modules\PLM\Core\Providers\PlmServiceProvider::class,
         Modules\GRC\Core\Providers\GrcServiceProvider::class,
+        Modules\GRC\Core\Providers\EventServiceProvider::class,
         Modules\Fina\Providers\FinaServiceProvider::class,
         Modules\EWM\Core\Providers\EwmServiceProvider::class,
         Modules\MM\Providers\MMServiceProvider::class,
