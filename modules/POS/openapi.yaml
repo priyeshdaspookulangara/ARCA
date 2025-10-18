@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+  title: ARCA.POS.SyncService
+  description: API for ingesting, managing, and reconciling POS data.
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /pos-sync/v1/events:
+    post:
+      summary: Ingest POS Events
+      description: Ingests a single event or a batch of events from a POS terminal.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                events:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/PosEvent'
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sync_batch_id:
+                    type: string
+                    format: uuid
+        '400':
+          description: Bad Request
+        '409':
+          description: Conflict - Duplicate Event
+        '500':
+          description: Internal Server Error
+  /pos-sync/v1/batches/{sync_batch_id}:
+    get:
+      summary: Get Batch Status
+      parameters:
+        - name: sync_batch_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Not Found
+  /pos-sync/v1/batches/{sync_batch_id}/replay:
+    post:
+      summary: Replay a Batch
+      parameters:
+        - name: sync_batch_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '202':
+          description: Accepted
+  /pos-sync/v1/dlq:
+    get:
+      summary: Get DLQ Items
+      responses:
+        '200':
+          description: OK
+  /pos-sync/v1/dlq/{dlq_id}/fix-and-replay:
+    post:
+      summary: Fix and Replay DLQ Item
+      parameters:
+        - name: dlq_id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '202':
+          description: Accepted
+
+components:
+  schemas:
+    PosEvent:
+      type: object
+      properties:
+        rth_meta:
+          type: object
+          properties:
+            idempotency_key:
+              type: string
+            trace_id:
+              type: string
+            source:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+        type:
+          type: string
+        payload:
+          type: object
+          example:
+            sale_id: "SALE-123"
+            items:
+              - sku: "SKU-001"
+                quantity: 1
+                price: 10.00
+            payments:
+              - type: "CASH"
+                amount: 10.00
