@@ -20,7 +20,8 @@
         "arca-modules/plm": "*",
         "erp-modules/ps": "*",
         "erp-modules/mm": "*",
-        "erp-modules/sd": "*"
+        "erp-modules/sd": "*",
+        "erp-modules/rth": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.0",

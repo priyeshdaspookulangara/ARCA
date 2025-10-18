@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4a622a951877abfafe805ff01736f906",
+    "content-hash": "6923a62563fbbd4ebf6dca03fd154e65",
     "packages": [
         {
             "name": "arca-modules/auth-mgt",
@@ -921,6 +921,38 @@
                 }
             ],
             "description": "Project System (PS) Module for the Modular ERP System.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "erp-modules/rth",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "modules/RTH",
+                "reference": "27aee7e2cdcfa300be6a8ba68cccf0b5b154ed40"
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "type": "erp-module",
+            "autoload": {
+                "psr-4": {
+                    "Modules\\RTH\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Your Name",
+                    "email": "you@example.com"
+                }
+            ],
+            "description": "RTH Module for the Modular ERP System.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
