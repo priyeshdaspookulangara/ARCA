@@ -7,6 +7,7 @@
     "require": {
         "php": "^8.1",
         "laravel/framework": "^10.0",
+        "laravel/sanctum": "^3.3",
         "arca-modules/auth-mgt": "*",
         "erp-modules/crm": "*",
         "arca-modules/ehs": "*",
@@ -33,10 +34,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "modules/",
-            "Modules\\MM\\": "modules/MM/src/",
-            "Modules\\SD\\": "modules/SD/src/"
+            "Modules\\": "modules/"
         },
+        "classmap": [
+            "database/factories"
+        ],
         "files": [
             "app/Helpers/module_path.php"
         ]
@@ -44,6 +46,7 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/",
+            "Modules\\AuthMgt\\Tests\\": "modules/AuthMgt/tests/",
             "Modules\\Fina\\Tests\\": "modules/Fina/tests/",
             "Modules\\HR\\Tests\\": "modules/HR/tests/",
             "Modules\\MM\\Tests\\": "modules/MM/tests/",
