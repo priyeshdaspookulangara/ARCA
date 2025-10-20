@@ -185,6 +185,7 @@ return [
         Modules\HR\Providers\HRServiceProvider::class,
         Modules\PS\Core\Providers\PsServiceProvider::class,
         Modules\RTH\Core\Providers\RTHServiceProvider::class,
+        Modules\ARCA_API_Gateway\Providers\GatewayServiceProvider::class,
     ])->toArray(),
 
     /*
