@@ -6,9 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
+use Modules\POS\Models\OfflineTransaction;
 use Modules\POS\Models\PosSyncBatch;
 use Modules\POS\Models\PosSyncEvent;
+use Modules\POS\Models\SyncLog;
 
 class SyncController extends Controller
 {
@@ -88,5 +91,59 @@ class SyncController extends Controller
             DB::rollBack();
             return response()->json(['message' => 'Failed to ingest events.', 'error' => $e->getMessage()], 500);
         }
+    }
+
+    public function syncOfflineBatch(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'BatchID' => 'required|string',
+            'Transactions' => 'required|array',
+            'Transactions.*.TxnID' => 'required|string',
+            'Transactions.*.payload' => 'required|json',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $batchId = $request->input('BatchID');
+        $transactions = $request->input('Transactions');
+
+        $response = Http::post(config('pos.rth_endpoint'), [
+            'BatchID' => $batchId,
+            'Transactions' => $transactions,
+        ]);
+
+        if ($response->failed()) {
+            return response()->json(['message' => 'Failed to sync with RTH.'], 500);
+        }
+
+        $responseData = $response->json();
+
+        $status = 'Success';
+        if ($responseData['Rejected'] > 0) {
+            $status = 'Partial';
+        }
+        if ($responseData['Rejected'] === count($transactions)) {
+            $status = 'Failed';
+        }
+
+        SyncLog::create([
+            'batch_id' => $batchId,
+            'count' => count($transactions),
+            'status' => $status,
+            'last_synced' => now(),
+        ]);
+
+        foreach ($responseData['Details'] as $detail) {
+            $offlineTx = OfflineTransaction::where('transaction_id', $detail['TxnID'])->first();
+            if ($offlineTx) {
+                $offlineTx->status = $detail['Status'] === 'Posted' ? 'Synced' : 'Error';
+                $offlineTx->sync_attempts += 1;
+                $offlineTx->save();
+            }
+        }
+
+        return response()->json($responseData);
     }
 }

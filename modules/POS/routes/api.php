@@ -14,4 +14,5 @@ Route::prefix('pos')->group(function () {
 
 Route::prefix('pos-sync/v1')->group(function () {
     Route::post('events', [SyncController::class, 'ingest']);
+    Route::post('sync/offline-batch', [SyncController::class, 'syncOfflineBatch']);
 });
