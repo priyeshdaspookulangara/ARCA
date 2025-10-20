@@ -8,6 +8,7 @@ use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
 use Modules\Fina\CO\PA\Infrastructure\Http\Controllers\MarketSegmentController;
 use Modules\Fina\CO\PA\Infrastructure\Http\Controllers\ProfitabilityReportController;
+use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
 
 Route::prefix('fina')->group(function () {
