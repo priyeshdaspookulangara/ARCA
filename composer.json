@@ -50,7 +50,8 @@
             "Modules\\Fina\\Tests\\": "modules/Fina/tests/",
             "Modules\\HR\\Tests\\": "modules/HR/tests/",
             "Modules\\MM\\Tests\\": "modules/MM/tests/",
-            "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/"
+            "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/",
+            "Modules\\POS\\Database\\Factories\\": "modules/POS/database/factories/"
         }
     },
     "scripts": {
