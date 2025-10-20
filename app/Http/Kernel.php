@@ -57,5 +57,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'check.auth.permission' => \Modules\AuthMgt\Http\Middleware\CheckAuthPermission::class,
+        'jwt.auth' => \Modules\ARCA_API_Gateway\Http\Middleware\JwtMiddleware::class,
+        'api.log' => \Modules\ARCA_API_Gateway\Http\Middleware\LogMiddleware::class,
     ];
 }
