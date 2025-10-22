@@ -21,6 +21,7 @@
         "erp-modules/ps": "*",
         "erp-modules/rth": "*",
         "erp-modules/sd": "*",
+        "erp-modules/wm": "*",
         "laravel/framework": "^10.0",
         "laravel/sanctum": "^3.3",
         "lcobucci/jwt": "^5.6"
@@ -52,7 +53,9 @@
             "Modules\\HR\\Tests\\": "modules/HR/tests/",
             "Modules\\MM\\Tests\\": "modules/MM/tests/",
             "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/",
-            "Modules\\POS\\Database\\Factories\\": "modules/POS/database/factories/"
+            "Modules\\POS\\Database\\Factories\\": "modules/POS/database/factories/",
+            "Modules\\WM\\Tests\\": "modules/ARCA.WM/tests/",
+            "Modules\\WM\\Database\\Factories\\": "modules/ARCA.WM/database/factories/"
         }
     },
     "scripts": {
