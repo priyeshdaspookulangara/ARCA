@@ -13,6 +13,7 @@
         "arca-modules/is-retail": "*",
         "arca-modules/mdg": "*",
         "arca-modules/plm": "*",
+        "arca-modules/integration-hub": "*",
         "erp-modules/crm": "*",
         "erp-modules/fina": "*",
         "erp-modules/hr": "*",

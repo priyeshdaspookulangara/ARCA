@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44b4a21f75a3b65dc27b79ee0599a640",
+    "content-hash": "010e756670630f8b6a59f6442ff419b3",
     "packages": [
         {
             "name": "arca-modules/auth-mgt",
@@ -129,6 +129,32 @@
                 }
             ],
             "description": "ARCA Governance, Risk, and Compliance (GRC) Module.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "arca-modules/integration-hub",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "modules/IntegrationHub",
+                "reference": "5b93f6f08d0cbee7cbe97dd33865e35245c53836"
+            },
+            "type": "laravel-module",
+            "autoload": {
+                "psr-4": {
+                    "Modules\\IntegrationHub\\": ""
+                }
+            },
+            "authors": [
+                {
+                    "name": "AI Architect",
+                    "email": ""
+                }
+            ],
+            "description": "The ARCA IntegrationHub module.",
             "transport-options": {
                 "symlink": true,
                 "relative": true

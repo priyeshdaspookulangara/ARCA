@@ -1,0 +1,17 @@
+{
+    "name": "arca-modules/integration-hub",
+    "description": "The ARCA IntegrationHub module.",
+    "type": "laravel-module",
+    "authors": [
+        {
+            "name": "AI Architect",
+            "email": ""
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Modules\\IntegrationHub\\": ""
+        }
+    }
+}

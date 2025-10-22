@@ -1,0 +1,13 @@
+{
+    "name": "IntegrationHub",
+    "alias": "integrationhub",
+    "description": "The ARCA IntegrationHub module.",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\IntegrationHub\\Providers\\IntegrationHubServiceProvider"
+    ],
+    "aliases": {},
+    "files": [],
+    "requires": []
+}
