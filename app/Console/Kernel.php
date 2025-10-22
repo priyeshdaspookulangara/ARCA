@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('pos:sync-offline-transactions')->everyMinute();
         $schedule->command('pos:purge-synced-transactions')->daily();
         $schedule->command('pos:cache-master-data')->hourly();
+        $schedule->command('payments:settle')->daily();
     }
 
     /**

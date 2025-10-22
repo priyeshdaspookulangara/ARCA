@@ -1,0 +1,17 @@
+{
+    "name": "erp-modules/payments",
+    "description": "The ARCA Payments module.",
+    "type": "laravel-module",
+    "authors": [
+        {
+            "name": "Jules",
+            "email": ""
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Modules\\Payments\\": "src/"
+        }
+    }
+}

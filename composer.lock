@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44b4a21f75a3b65dc27b79ee0599a640",
+    "content-hash": "f4dc99038fa38bd81aa503cff92ef823",
     "packages": [
         {
             "name": "arca-modules/auth-mgt",
@@ -889,6 +889,32 @@
                 }
             ],
             "description": "Materials Management (MM) Module for the Modular ERP System.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "erp-modules/payments",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "modules/Payments",
+                "reference": "48454e01a354e9ffa0a453162378f18362f7ea79"
+            },
+            "type": "laravel-module",
+            "autoload": {
+                "psr-4": {
+                    "Modules\\Payments\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Jules",
+                    "email": ""
+                }
+            ],
+            "description": "The ARCA Payments module.",
             "transport-options": {
                 "symlink": true,
                 "relative": true
