@@ -1,0 +1,21 @@
+{
+    "name": "erp-modules/wm",
+    "description": "Warehouse Management (WM) Module for the Modular ERP System.",
+    "type": "erp-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Your Name",
+            "email": "you@example.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\WM\\": "src/",
+            "Modules\\WM\\Database\\Factories\\": "database/factories/"
+        }
+    },
+    "require": {
+        "php": "^8.1"
+    }
+}
