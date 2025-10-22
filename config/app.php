@@ -180,10 +180,12 @@ return [
         Modules\MM\Providers\MMServiceProvider::class,
         Modules\SD\Providers\SDServiceProvider::class,
         Modules\POS\Providers\POSServiceProvider::class,
+        Modules\POS\Providers\EventServiceProvider::class,
         Modules\LSCM\Core\Providers\LscmServiceProvider::class,
         Modules\HR\Providers\HRServiceProvider::class,
         Modules\PS\Core\Providers\PsServiceProvider::class,
         Modules\RTH\Core\Providers\RTHServiceProvider::class,
+        Modules\EventBus\Core\Providers\EventBusServiceProvider::class,
     ])->toArray(),
 
     /*

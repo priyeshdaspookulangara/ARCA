@@ -15,7 +15,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('pos:sync-offline-transactions')->everyMinute();
+        $schedule->command('pos:purge-synced-transactions')->daily();
+        $schedule->command('pos:cache-master-data')->hourly();
     }
 
     /**

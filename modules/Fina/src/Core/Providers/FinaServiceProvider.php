@@ -177,21 +177,18 @@ class FinaServiceProvider extends ServiceProvider
      */
     protected function loadRoutes()
     {
-        // Helper function for module_path (assuming it's available globally or via a trait)
-        // In a real scenario, ensure module_path() is accessible.
-        // For this subtask, we'll write it out, but normally it'd be cleaner.
-        $modulePath = base_path('modules/' . $this->moduleName);
+        $modulePath = module_path($this->moduleName);
 
         if (file_exists($modulePath . '/routes/web.php')) {
             Route::middleware('web')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers") // Adjust namespace if needed
+                ->namespace("Modules\{$this->moduleName}\Http\Controllers")
                 ->group($modulePath . '/routes/web.php');
         }
 
         if (file_exists($modulePath . '/routes/api.php')) {
             Route::prefix('api')
                 ->middleware('api')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers") // Adjust namespace if needed
+                ->namespace("Modules\{$this->moduleName}\Http\Controllers")
                 ->group($modulePath . '/routes/api.php');
         }
     }

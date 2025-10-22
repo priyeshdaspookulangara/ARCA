@@ -1,58 +1,26 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
-use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
-use Modules\Fina\FI\AA\Http\Controllers\AssetController;
-use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
-use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
 use Modules\Fina\CO\PA\Infrastructure\Http\Controllers\MarketSegmentController;
 use Modules\Fina\CO\PA\Infrastructure\Http\Controllers\ProfitabilityReportController;
-use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
+use Modules\Fina\FI\GL\Http\Controllers\GLDocumentController;
+use Modules\Fina\FI\AR\Http\Controllers\ARInvoiceController;
+use Modules\Fina\FI\BL\Http\Controllers\BankAccountController;
+use Modules\Fina\FI\BL\Http\Controllers\BankMasterController;
 use Modules\Fina\FI\BL\Http\Controllers\BankStatementController;
+use Modules\Fina\FI\AP\Http\Controllers\APInvoiceController;
+use Modules\Fina\FI\AA\Http\Controllers\AssetController;
+use Modules\Fina\Http\Controllers\EventListenerController;
 
 Route::prefix('fina')->group(function () {
-    Route::prefix('gl')->group(function () {
-        Route::post('documents', [GLDocumentController::class, 'store']);
-        Route::get('documents/{id}', [GLDocumentController::class, 'show']);
-    });
-
-    Route::prefix('ap')->group(function () {
-        Route::post('invoices', [APInvoiceController::class, 'store']);
-        Route::get('invoices/{id}', [APInvoiceController::class, 'show']);
-    });
-
-    Route::prefix('ar')->group(function () {
-        Route::post('invoices', [ARInvoiceController::class, 'store']);
-        Route::get('invoices/{id}', [ARInvoiceController::class, 'show']);
-    });
-
-    Route::prefix('aa')->group(function () {
-        Route::post('assets', [AssetController::class, 'store']);
-        Route::get('assets/{id}', [AssetController::class, 'show']);
-    });
-
-    Route::prefix('bl')->group(function () {
-        Route::post('banks', [BankMasterController::class, 'store']);
-        Route::get('banks/{id}', [BankMasterController::class, 'show']);
-        Route::put('banks/{id}', [BankMasterController::class, 'update']);
-        Route::delete('banks/{id}', [BankMasterController::class, 'destroy']);
-
-        Route::post('bank-accounts', [BankAccountController::class, 'store']);
-        Route::get('bank-accounts/{id}', [BankAccountController::class, 'show']);
-        Route::put('bank-accounts/{id}', [BankAccountController::class, 'update']);
-        Route::delete('bank-accounts/{id}', [BankAccountController::class, 'destroy']);
-
-        Route::post('bank-statements', [BankStatementController::class, 'store']);
-        Route::get('bank-statements/{id}', [BankStatementController::class, 'show']);
-        Route::put('bank-statements/{id}', [BankStatementController::class, 'update']);
-        Route::delete('bank-statements/{id}', [BankStatementController::class, 'destroy']);
-    });
-
-    Route::prefix('co')->group(function () {
-        Route::prefix('pa')->group(function () {
-            Route::apiResource('market-segments', MarketSegmentController::class);
-            Route::apiResource('profitability-reports', ProfitabilityReportController::class);
-        });
-    });
+    Route::apiResource('market-segments', MarketSegmentController::class);
+    Route::apiResource('profitability-reports', ProfitabilityReportController::class);
+    Route::apiResource('gl-documents', GLDocumentController::class);
+    Route::apiResource('ar-invoices', ARInvoiceController::class);
+    Route::apiResource('bank-accounts', BankAccountController::class);
+    Route::apiResource('bank-masters', BankMasterController::class);
+    Route::apiResource('bank-statements', BankStatementController::class);
+    Route::apiResource('ap-invoices', APInvoiceController::class);
+    Route::apiResource('assets', AssetController::class);
+    Route::post('events', [EventListenerController::class, 'handle']);
 });

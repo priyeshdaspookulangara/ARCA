@@ -34,7 +34,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "modules/"
+            "Modules\\": "modules/",
+            "Modules\\EventBus\\Database\\Seeders\\": "modules/EventBus/database/seeders/"
         },
         "classmap": [
             "database/factories"
@@ -50,7 +51,10 @@
             "Modules\\Fina\\Tests\\": "modules/Fina/tests/",
             "Modules\\HR\\Tests\\": "modules/HR/tests/",
             "Modules\\MM\\Tests\\": "modules/MM/tests/",
-            "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/"
+            "Modules\\Fina\\Database\\Factories\\": "modules/Fina/database/factories/",
+            "Modules\\POS\\Database\\Factories\\": "modules/POS/database/factories/",
+            "Modules\\EventBus\\Tests\\": "modules/EventBus/tests/",
+            "Modules\\POS\\Tests\\": "modules/POS/tests/"
         }
     },
     "scripts": {
