@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "44b4a21f75a3b65dc27b79ee0599a640",
+    "content-hash": "10f3bbf3a746cea59c8b76daed6809f5",
     "packages": [
         {
             "name": "arca-modules/auth-mgt",

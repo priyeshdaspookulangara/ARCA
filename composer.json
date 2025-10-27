@@ -22,7 +22,7 @@
         "erp-modules/rth": "*",
         "erp-modules/sd": "*",
         "erp-modules/wm": "*",
-        "laravel/framework": "^10.0",
+        "laravel/framework": "10.49.1",
         "laravel/sanctum": "^3.3",
         "lcobucci/jwt": "^5.6"
     },
@@ -36,7 +36,8 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/",
-            "Modules\\": "modules/"
+            "Modules\\": "modules/",
+            "Modules\\TaxEngine\\": "modules/TaxEngine/"
         },
         "classmap": [
             "database/factories"
@@ -81,7 +82,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "wikimedia/composer-merge-plugin": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

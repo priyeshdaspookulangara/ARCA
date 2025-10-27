@@ -161,6 +161,7 @@ return [
         /*
          * Application Service Providers...
          */
+        Modules\TaxEngine\Providers\TaxEngineServiceProvider::class,
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
