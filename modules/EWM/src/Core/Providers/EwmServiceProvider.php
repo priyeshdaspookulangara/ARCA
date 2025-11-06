@@ -59,13 +59,13 @@ class EwmServiceProvider extends ServiceProvider
         }
 
         // RF routes could be specifically namespaced and prefixed
-        $rfRoutesPath = module_path($this->moduleName, 'src/RF/Http/routes.php');
-        if (File::exists($rfRoutesPath)) {
-             Route::prefix('api/ewm/rf') // Specific prefix for RF APIs
-                ->middleware(['api', 'auth:sanctum']) // Ensure RF routes are authenticated
-                ->namespace("Modules\EWM\RF\Http\Controllers")
-                ->group($rfRoutesPath);
-        }
+        // $rfRoutesPath = module_path($this->moduleName, 'src/RF/Http/routes.php');
+        // if (File::exists($rfRoutesPath)) {
+        //      Route::prefix('api/ewm/rf') // Specific prefix for RF APIs
+        //         ->middleware(['api', 'auth:sanctum']) // Ensure RF routes are authenticated
+        //         ->namespace("Modules\EWM\RF\Http\Controllers")
+        //         ->group($rfRoutesPath);
+        // }
     }
 
     public function provides()

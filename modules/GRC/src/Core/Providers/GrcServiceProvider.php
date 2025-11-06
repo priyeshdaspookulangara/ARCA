@@ -81,7 +81,6 @@ class GrcServiceProvider extends ServiceProvider
         if (File::exists($mainModuleRoutePath . '/api.php')) {
             Route::prefix('api/grc')
                 ->middleware(['api', 'auth:sanctum']) // Secure GRC APIs
-                ->namespace("Modules\\GRC\\Core\\Http\\Controllers") // Default for core GRC routes
                 ->group($mainModuleRoutePath . '/api.php');
         }
 

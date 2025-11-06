@@ -158,14 +158,12 @@ class CrmServiceProvider extends ServiceProvider
 
         if (file_exists($modulePath . '/routes/web.php')) {
             Route::middleware('web')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers") // Adjust if Http controllers are deeper
                 ->group($modulePath . '/routes/web.php');
         }
 
         if (file_exists($modulePath . '/routes/api.php')) {
             Route::prefix('api')
                 ->middleware('api')
-                ->namespace("Modules\{$this->moduleName}\Http\Controllers") // Adjust if Http controllers are deeper
                 ->group($modulePath . '/routes/api.php');
         }
     }
