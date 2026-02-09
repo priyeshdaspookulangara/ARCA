@@ -20,6 +20,7 @@ Route::prefix('fina')->group(function () {
     Route::prefix('ap')->group(function () {
         Route::post('invoices', [APInvoiceController::class, 'store']);
         Route::get('invoices/{id}', [APInvoiceController::class, 'show']);
+        Route::get('invoices', [APInvoiceController::class, 'index']);
     });
 
     Route::prefix('ar')->group(function () {

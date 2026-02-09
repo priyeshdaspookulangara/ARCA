@@ -8,4 +8,5 @@ interface APInvoiceRepositoryInterface
 {
     public function create(array $data): APInvoiceHeader;
     public function find(int $id): ?APInvoiceHeader;
+    public function all(string $status = null);
 }

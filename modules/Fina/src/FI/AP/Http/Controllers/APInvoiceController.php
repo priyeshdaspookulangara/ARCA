@@ -35,4 +35,11 @@ class APInvoiceController extends Controller
         }
         return response()->json($invoice);
     }
+
+    public function index(Request $request)
+    {
+        $status = $request->query('status');
+        $invoices = $this->apInvoiceRepository->all($status);
+        return response()->json($invoices);
+    }
 }

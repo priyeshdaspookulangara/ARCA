@@ -16,4 +16,15 @@ class EloquentAPInvoiceRepository implements APInvoiceRepositoryInterface
     {
         return APInvoiceHeader::find($id);
     }
+
+    public function all(string $status = null)
+    {
+        $query = APInvoiceHeader::query();
+
+        if ($status === 'pending') {
+            $query->whereIn('payment_status', ['Open', 'Partially Paid']);
+        }
+
+        return $query->get();
+    }
 }

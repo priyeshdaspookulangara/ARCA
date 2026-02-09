@@ -55,6 +55,7 @@ class FinaServiceProvider extends ServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(module_path($this->moduleName, 'database/migrations'));
+        $this->loadFactoriesFrom(module_path($this->moduleName, 'database/factories'));
         $this->loadRoutes();
 
         Event::listen(
